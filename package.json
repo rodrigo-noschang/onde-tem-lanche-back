@@ -19,5 +19,8 @@
   "homepage": "https://github.com/rodrigo-noschang/onde-tem-lanche-back#readme",
   "devDependencies": {
     "prisma": "^5.1.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.1.1"
   }
 }
