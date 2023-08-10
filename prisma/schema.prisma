@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Allergenics {
+  Soja
+  Peixe
+  Ovos
+  Mariscos
+  Nozes
+  Amendoim
+  Gluten
+  Leite
+  Nenhum
+}
+
+enum Specifications {
+  Vegetariano
+  Vegano
+  Sem_Gluten
+  Sem_Lactose
+}
+
+model Dish {
+  dish_id        String           @id() @default(uuid())
+  name           String
+  description    String?
+  price          Decimal          @db.Money
+  allergenics    Allergenics[]
+  specifications Specifications[]
+  ratings        Int[]
+  created_at     DateTime
+  updated_at     DateTime
+
+  @@index([description, specifications, ratings, price])
+  @@map("dishes")
+}

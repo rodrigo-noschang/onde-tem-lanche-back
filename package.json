@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/rodrigo-noschang/onde-tem-lanche-back/issues"
   },
-  "homepage": "https://github.com/rodrigo-noschang/onde-tem-lanche-back#readme"
+  "homepage": "https://github.com/rodrigo-noschang/onde-tem-lanche-back#readme",
+  "devDependencies": {
+    "prisma": "^5.1.1"
+  }
 }

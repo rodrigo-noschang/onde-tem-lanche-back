@@ -6,6 +6,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=italianosebrasileiros
+      - POSTGRESQL_USERNAME=username
       - POSTGRESQL_PASSWORD=1234
-      - POSTGRESQL_DATABASE=onde-tem-lanche
+      - POSTGRESQL_DATABASE=onde_tem_lanche
