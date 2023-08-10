@@ -10,36 +10,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Allergenics {
-  Soja
-  Peixe
-  Ovos
-  Mariscos
-  Nozes
-  Amendoim
-  Gluten
-  Leite
-  Nenhum
-}
+// enum Allergenics {
+//   Soja
+//   Peixe
+//   Ovos
+//   Mariscos
+//   Nozes
+//   Amendoim
+//   Gluten
+//   Leite
+//   Nenhum
+// }
 
-enum Specifications {
-  Vegetariano
-  Vegano
-  Sem_Gluten
-  Sem_Lactose
+// enum Specifications {
+//   Vegetariano
+//   Vegano
+//   Sem_Gluten
+//   Sem_Lactose
+// }
+
+// enum FoodOptions {
+//   Carnes
+//   Massas
+//   Pizza
+//   Lanches
+//   Porcoes
+//   Saladas
+//   Confeitaria
+//   Acai
+//   Sorvete
+//   Yakisoba
+//   Marmitex
+//   Esfiha
+//   Japones
+// }
+
+// enum WeekDay {
+//   Segunda_feira
+//   Terca_feira
+//   Quarta_feira
+//   Quinta_feira
+//   Sexta_feira
+//   Sabado
+//   Domingo
+// }
+
+model OperationHour {
+  operation_hour_id String     @id @default(uuid())
+  day               String // WeekDay
+  opens_at          DateTime
+  closes_at         DateTime
+  restaurant        Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
+  restaurant_id     String     @unique
 }
 
 model Dish {
-  dish_id        String           @id() @default(uuid())
+  dish_id        String   @id() @default(uuid())
   name           String
   description    String?
-  price          Decimal          @db.Money
-  allergenics    Allergenics[]
-  specifications Specifications[]
+  price          Decimal  @db.Money
+  allergenics    String[] // Allergenics 
+  specifications String[] // Specifications
   ratings        Int[]
-  created_at     DateTime
-  updated_at     DateTime
+
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
+  restaurant_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime
 
   @@index([description, specifications, ratings, price])
   @@map("dishes")
+}
+
+model Restaurant {
+  restaurant_id String   @id() @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  description   String?
+  phone         String   @unique
+  lat           Decimal
+  lng           Decimal
+  serves        String[] // FoodOptions
+  rating        Int[]
+
+  menu           Dish[]
+  operation_hour OperationHour?
+
+  created_at DateTime @default(now())
+  updated_at DateTime
+
+  @@map("restaurants")
 }
