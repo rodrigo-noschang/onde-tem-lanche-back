@@ -56,12 +56,15 @@ datasource db {
 // }
 
 model OperationHour {
-  operation_hour_id String     @id @default(uuid())
+  operation_hour_id String   @id @default(uuid())
   day               String // WeekDay
   opens_at          DateTime
   closes_at         DateTime
-  restaurant        Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
-  restaurant_id     String     @unique
+
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
+  restaurant_id String     @unique
+
+  @@map("operation_hours")
 }
 
 model Dish {
@@ -77,9 +80,11 @@ model Dish {
   restaurant_id String
 
   created_at DateTime @default(now())
-  updated_at DateTime
+  updated_at DateTime @updatedAt
 
-  @@index([description, specifications, ratings, price])
+  Favorite Favorite[]
+
+  @@index([description, specifications, price])
   @@map("dishes")
 }
 
@@ -93,7 +98,7 @@ model Restaurant {
   lat           Decimal
   lng           Decimal
   serves        String[] // FoodOptions
-  rating        Int[]
+  ratings       Int[]
 
   menu           Dish[]
   operation_hour OperationHour?
@@ -101,5 +106,31 @@ model Restaurant {
   created_at DateTime @default(now())
   updated_at DateTime
 
+  @@index([name, description, serves, lat, lng])
   @@map("restaurants")
+}
+
+model Favorite {
+  favorite_id String @id @default(uuid())
+
+  customer    Customer @relation(fields: [customer_id], references: [customer_id], onDelete: Cascade)
+  customer_id String
+
+  dish    Dish   @relation(fields: [dish_id], references: [dish_id], onDelete: Cascade)
+  dish_id String
+
+  @@map("favorites")
+}
+
+model Customer {
+  customer_id   String   @id @default(uuid())
+  name          String
+  email         String
+  password_hash String
+  preferences   String[] // FoodOptions
+  allergenics   String[] // Allergenics
+
+  Favorites Favorite[]
+
+  @@map("customers")
 }
