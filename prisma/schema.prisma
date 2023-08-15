@@ -10,51 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// enum Allergenics {
-//   Soja
-//   Peixe
-//   Ovos
-//   Mariscos
-//   Nozes
-//   Amendoim
-//   Gluten
-//   Leite
-//   Nenhum
-// }
-
-// enum Specifications {
-//   Vegetariano
-//   Vegano
-//   Sem_Gluten
-//   Sem_Lactose
-// }
-
-// enum FoodOptions {
-//   Carnes
-//   Massas
-//   Pizza
-//   Lanches
-//   Porcoes
-//   Saladas
-//   Confeitaria
-//   Acai
-//   Sorvete
-//   Yakisoba
-//   Marmitex
-//   Esfiha
-//   Japones
-// }
-
-// enum WeekDay {
-//   Segunda_feira
-//   Terca_feira
-//   Quarta_feira
-//   Quinta_feira
-//   Sexta_feira
-//   Sabado
-//   Domingo
-// }
-
 model OperationHour {
   operation_hour_id String   @id @default(uuid())
   day               String // WeekDay
@@ -81,8 +36,8 @@ model Dish {
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
   restaurant_id String
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
 
   Favorite Favorite[]
 
@@ -96,17 +51,17 @@ model Restaurant {
   email         String   @unique
   password_hash String
   description   String?
-  phone         String   @unique
-  lat           Decimal
-  lng           Decimal
+  phone         String?  @unique
+  lat           Decimal?
+  lng           Decimal?
   serves        String[] // FoodOptions
   ratings       Int[]
 
   menu           Dish[]
   operation_hour OperationHour?
 
-  created_at DateTime @default(now())
-  updated_at DateTime
+  created_at DateTime  @default(now())
+  updated_at DateTime?
 
   @@index([name, description, serves, lat, lng])
   @@map("restaurants")
