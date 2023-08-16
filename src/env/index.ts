@@ -6,7 +6,8 @@ config();
 const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'production']).default('development'),
     DATABASE_URL: z.string(),
-    PORT: z.coerce.number().default(3000)
+    PORT: z.coerce.number().default(3000),
+    JWT_SECRET: z.string()
 })
 
 const envParse = envSchema.safeParse(process.env);

@@ -2,16 +2,12 @@ import { Prisma } from "@prisma/client";
 import { EmailAlreadyRegistered } from "../../errors/emailAlreadyRegistered";
 import { prisma } from "..";
 
-export async function findUniqueByEmail(email: string) {
+export async function findUniqueRestaurantByEmail(email: string) {
     const existingRestaurant = await prisma.restaurant.findUnique({
         where: {
             email
         }
     })
-
-    if (existingRestaurant) {
-        throw new EmailAlreadyRegistered();
-    }
 
     return existingRestaurant;
 }

@@ -2,8 +2,8 @@ import { z } from "zod";
 import bcrypt from 'bcrypt';
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findUniqueByEmail, saveRestaurant } from "../../db/restaurants";
-import { EmailAlreadyRegistered } from "../../errors/emailAlreadyRegistered";
+import { findUniqueRestaurantByEmail, saveRestaurant } from "../../db/restaurants";
+import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
 
 export async function registerRestaurant(req: FastifyRequest, res: FastifyReply) {
     const restaurantData = req.body;
@@ -17,7 +17,11 @@ export async function registerRestaurant(req: FastifyRequest, res: FastifyReply)
     const data = registerRestaurantSchema.parse(restaurantData);
 
     try {
-        await findUniqueByEmail(data.email);
+        const restaurant = await findUniqueRestaurantByEmail(data.email);
+        if (restaurant) {
+            throw new EmailAlreadyRegisteredError();
+        }
+
         const password_hash = await bcrypt.hash(data.password, 6);
 
         const newRestaurant = {
@@ -30,7 +34,7 @@ export async function registerRestaurant(req: FastifyRequest, res: FastifyReply)
         return res.status(201).send();
 
     } catch (error) {
-        if (error instanceof EmailAlreadyRegistered) {
+        if (error instanceof EmailAlreadyRegisteredError) {
             return res.status(400).send({
                 message: "Email já cadastrado"
             })

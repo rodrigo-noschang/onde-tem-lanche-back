@@ -1,4 +1,4 @@
-export class EmailAlreadyRegistered extends Error {
+export class EmailAlreadyRegisteredError extends Error {
     constructor() {
         super('Email já cadastrado');
     }

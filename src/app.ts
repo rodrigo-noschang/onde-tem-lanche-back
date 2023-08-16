@@ -1,11 +1,19 @@
 import fastify from 'fastify';
 import { ZodError } from 'zod';
+import fastifyJwt from '@fastify/jwt';
 
 import { restaurantsRoutes } from './routes/restaurants';
+import { env } from './env';
 
 export const app = fastify();
 
 app.register(restaurantsRoutes);
+app.register(fastifyJwt, {
+    secret: env.JWT_SECRET,
+    sign: {
+        expiresIn: '7d'
+    }
+})
 
 app.setErrorHandler((error, request, reply) => {
     if (error instanceof ZodError) {
