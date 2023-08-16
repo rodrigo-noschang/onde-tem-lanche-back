@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { EmailAlreadyRegistered } from "../../errors/emailAlreadyRegistered";
 import { prisma } from "..";
 
 export async function findUniqueRestaurantByEmail(email: string) {
@@ -12,10 +11,28 @@ export async function findUniqueRestaurantByEmail(email: string) {
     return existingRestaurant;
 }
 
+export async function findUniqueRestaurantByPhone(phone: string) {
+    const existingRestaurant = await prisma.restaurant.findUnique({
+        where: {
+            phone
+        }
+    })
+
+    return existingRestaurant;
+}
+
 export async function saveRestaurant(data: Prisma.RestaurantUncheckedCreateInput) {
-    console.log(data);
 
     await prisma.restaurant.create({
         data
     });
+}
+
+export async function updateRestaurantData(restaurant_id: string, data: Prisma.RestaurantUpdateInput,) {
+    await prisma.restaurant.update({
+        where: {
+            restaurant_id
+        },
+        data
+    })
 }
