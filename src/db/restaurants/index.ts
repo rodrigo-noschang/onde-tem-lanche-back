@@ -4,6 +4,8 @@ import { prisma } from "..";
 
 import { Allergens, Preferences } from "../../static";
 
+const AMOUNT_PER_PAGE = 20;
+
 export async function findUniqueRestaurantByEmail(email: string) {
     const existingRestaurant = await prisma.restaurant.findUnique({
         where: {
@@ -65,15 +67,36 @@ interface FindManyByFilterProps {
     preferences: Preferences[],
     page: number
 }
-export async function findManyRestaurantsByFilter({ preferences, page }: FindManyByFilterProps) {
-    const AMOUNT_PER_PAGE = 20;
 
+export async function findManyRestaurantsByFilter({ preferences, page }: FindManyByFilterProps) {
+    const restaurants = await prisma.restaurant.findMany({
+        where: {
+            serves: {
+                hasSome: preferences
+            }
+        },
+        take: page * AMOUNT_PER_PAGE,
+        skip: (page - 1) * AMOUNT_PER_PAGE
+    })
+
+    return restaurants;
+}
+
+export async function findManyRestaurantsByQuery(query: string, page: number) {
     const restaurants = await prisma.restaurant.findMany({
         where: {
             OR: [
                 {
-                    serves: {
-                        hasSome: preferences
+                    name: {
+                        contains: query,
+                        mode: "insensitive"
+                    },
+
+                },
+                {
+                    description: {
+                        contains: query,
+                        mode: "insensitive"
                     }
                 }
             ]
