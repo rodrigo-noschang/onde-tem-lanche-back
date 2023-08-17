@@ -4,10 +4,13 @@ import fastifyJwt from '@fastify/jwt';
 
 import { restaurantsRoutes } from './routes/restaurants';
 import { env } from './env';
+import { operationHoursRoutes } from './routes/operation_hours';
 
 export const app = fastify();
 
 app.register(restaurantsRoutes);
+app.register(operationHoursRoutes)
+
 app.register(fastifyJwt, {
     secret: env.JWT_SECRET,
     sign: {

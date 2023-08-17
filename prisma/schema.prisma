@@ -11,10 +11,10 @@ datasource db {
 }
 
 model OperationHour {
-  operation_hour_id String   @id @default(uuid())
+  operation_hour_id String @id @default(uuid())
   day               String // WeekDay
-  opens_at          DateTime
-  closes_at         DateTime
+  opens_at          String
+  closes_at         String
 
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
   restaurant_id String     @unique
