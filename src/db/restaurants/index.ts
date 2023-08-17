@@ -1,5 +1,8 @@
 import { Prisma, Restaurant } from "@prisma/client";
+
 import { prisma } from "..";
+
+import { Allergens, Preferences } from "../../static";
 
 export async function findUniqueRestaurantByEmail(email: string) {
     const existingRestaurant = await prisma.restaurant.findUnique({
@@ -43,7 +46,7 @@ interface FindManyByLocationProps {
     page: number
 }
 
-export async function findManyByLocation({ lat, lng, page }: FindManyByLocationProps) {
+export async function findManyRestaurantsByLocation({ lat, lng, page }: FindManyByLocationProps) {
     const limit = 20;
     const offset = (page - 1) * 20;
 
@@ -53,6 +56,31 @@ export async function findManyByLocation({ lat, lng, page }: FindManyByLocationP
         LIMIT ${limit} 
         OFFSET ${offset}
     `;
+
+    return restaurants;
+}
+
+
+interface FindManyByFilterProps {
+    preferences: Preferences[],
+    page: number
+}
+export async function findManyRestaurantsByFilter({ preferences, page }: FindManyByFilterProps) {
+    const AMOUNT_PER_PAGE = 20;
+
+    const restaurants = await prisma.restaurant.findMany({
+        where: {
+            OR: [
+                {
+                    serves: {
+                        hasSome: preferences
+                    }
+                }
+            ]
+        },
+        take: page * AMOUNT_PER_PAGE,
+        skip: (page - 1) * AMOUNT_PER_PAGE
+    })
 
     return restaurants;
 }

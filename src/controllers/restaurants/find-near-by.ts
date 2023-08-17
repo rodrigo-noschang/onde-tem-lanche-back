@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { z } from "zod"
-import { findManyByLocation } from "../../db/restaurants";
+import { findManyRestaurantsByLocation } from "../../db/restaurants";
 
 interface RequestQuery {
     lat: number,
@@ -8,7 +8,7 @@ interface RequestQuery {
     page?: number
 }
 
-export async function FindNearByRestaurants(req: FastifyRequest, reply: FastifyReply) {
+export async function findNearByRestaurants(req: FastifyRequest, reply: FastifyReply) {
     const requestQuery: RequestQuery = req.query as RequestQuery;
 
     const findNearBySchema = z.object({
@@ -19,7 +19,7 @@ export async function FindNearByRestaurants(req: FastifyRequest, reply: FastifyR
 
     const data = findNearBySchema.parse(requestQuery);
 
-    const restaurants = await findManyByLocation({
+    const restaurants = await findManyRestaurantsByLocation({
         lat: data.lat,
         lng: data.lng,
         page: data.page
