@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Restaurant } from "@prisma/client";
 import { prisma } from "..";
 
 export async function findUniqueRestaurantByEmail(email: string) {
@@ -35,4 +35,24 @@ export async function updateRestaurantData(restaurant_id: string, data: Prisma.R
         },
         data
     })
+}
+
+interface FindManyByLocationProps {
+    lat: number,
+    lng: number,
+    page: number
+}
+
+export async function findManyByLocation({ lat, lng, page }: FindManyByLocationProps) {
+    const limit = 20;
+    const offset = (page - 1) * 20;
+
+    const restaurants = await prisma.$queryRaw<Restaurant[]>`
+        SELECT * from restaurants
+        WHERE ( 6371 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) <= 10
+        LIMIT ${limit} 
+        OFFSET ${offset}
+    `;
+
+    return restaurants;
 }
