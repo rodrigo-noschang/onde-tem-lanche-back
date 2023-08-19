@@ -18,13 +18,13 @@ export async function findUniqueCustomerByEmail(email: string) {
 }
 
 export async function findManyCustomersByEmail(email: string) {
-    const emails = await prisma.customer.findMany({
+    const emails = await prisma.customer.count({
         where: {
             email
         }
     })
 
-    return emails.length;
+    return emails;
 }
 
 export async function updateCustomerData(data: Prisma.CustomerUpdateInput, customer_id: string) {

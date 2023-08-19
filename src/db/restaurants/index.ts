@@ -2,9 +2,30 @@ import { Prisma, Restaurant } from "@prisma/client";
 
 import { prisma } from "..";
 
-import { Allergens, Preferences } from "../../static";
+import { Preferences } from "../../static";
 
 const AMOUNT_PER_PAGE = 20;
+
+export async function findUniqueById(restaurant_id: string) {
+    const restaurant = await prisma.restaurant.findUnique({
+        where: {
+            restaurant_id
+        },
+        include: {
+            operation_hour: {
+                select: {
+                    restaurant_id: false,
+                    day: true,
+                    opens_at: true,
+                    closes_at: true,
+                }
+            },
+            menu: true
+        }
+    })
+
+    return restaurant;
+}
 
 export async function findUniqueRestaurantByEmail(email: string) {
     const existingRestaurant = await prisma.restaurant.findUnique({
@@ -17,13 +38,13 @@ export async function findUniqueRestaurantByEmail(email: string) {
 }
 
 export async function findManyRestaurantsByEmail(email: string) {
-    const existingRestaurant = await prisma.restaurant.findMany({
+    const existingRestaurant = await prisma.restaurant.count({
         where: {
             email
-        }
+        },
     })
 
-    return existingRestaurant.length;
+    return existingRestaurant;
 }
 
 export async function findUniqueRestaurantByPhone(phone: string) {
@@ -37,13 +58,13 @@ export async function findUniqueRestaurantByPhone(phone: string) {
 }
 
 export async function findManyRestaurantsByPhone(phone: string) {
-    const existingRestaurant = await prisma.restaurant.findMany({
+    const existingRestaurant = await prisma.restaurant.count({
         where: {
             phone
         }
     })
 
-    return existingRestaurant.length;
+    return existingRestaurant;
 }
 
 export async function saveRestaurant(data: Prisma.RestaurantUncheckedCreateInput) {
@@ -126,4 +147,17 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
     })
 
     return restaurants;
+}
+
+export async function updateRestaurantRatings(rate: number, restaurant_id: string) {
+    await prisma.restaurant.update({
+        where: {
+            restaurant_id
+        },
+        data: {
+            ratings: {
+                push: rate,
+            }
+        }
+    })
 }

@@ -22,7 +22,6 @@ app.register(fastifyJwt, {
 })
 
 app.setErrorHandler((error, request, reply) => {
-    console.log(error);
     if (error instanceof ZodError) {
         return reply.status(400).send({
             message: error.format()
