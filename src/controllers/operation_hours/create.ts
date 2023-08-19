@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { update } from "../../db/operation_hours";
+import { createHour } from "../../db/operation_hours";
 
 export async function updateRestaurantOperationHours(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;
@@ -14,17 +14,20 @@ export async function updateRestaurantOperationHours(req: FastifyRequest, reply:
         .refine(schema => schema.closes_at >= schema.opens_at, {
             message: 'Horário de fechamento precisa ser maior que o de abertura'
         })
+        .array();
 
     const data = updateHoursSchema.parse(requestData);
 
-    const formattedData = {
-        day: data.day,
-        opens_at: data.opens_at.toString(),
-        closes_at: data.closes_at.toString(),
-        restaurant_id
-    }
+    const formattedData = data.map(date => {
+        return {
+            day: date.day,
+            opens_at: date.opens_at.toString(),
+            closes_at: date.closes_at.toString(),
+            restaurant_id
+        }
+    });
 
-    await update(formattedData);
+    await createHour(formattedData);
 
     return reply.status(201).send();
 }

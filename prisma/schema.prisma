@@ -17,7 +17,7 @@ model OperationHour {
   closes_at         String
 
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
-  restaurant_id String     @unique
+  restaurant_id String
 
   @@map("operation_hours")
 }
@@ -58,7 +58,7 @@ model Restaurant {
   ratings       Int[]
 
   menu           Dish[]
-  operation_hour OperationHour?
+  operation_hour OperationHour[]
 
   created_at DateTime  @default(now())
   updated_at DateTime?
