@@ -3,11 +3,12 @@ import { FastifyInstance } from "fastify";
 import { rateDish } from "../../controllers/dishes/rate";
 import { registerDish } from "../../controllers/dishes/register";
 import { editDishData } from "../../controllers/dishes/edit-data";
+import { findDishById } from "../../controllers/dishes/find-by-id";
+import { findDishesByRestaurant } from "../../controllers/dishes/find-by-restaurants";
 
+import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
-import { isCustomerMiddleware } from "../../middlewares/isCustomer";
-import { findDishesByRestaurant } from "../../controllers/dishes/find-by-restaurants";
 
 export async function dishesRoutes(app: FastifyInstance) {
     app.post(
@@ -43,5 +44,6 @@ export async function dishesRoutes(app: FastifyInstance) {
         rateDish
     );
 
+    app.get('/dishes/:dish_id', findDishById);
     app.get('/dishes/:restaurant_id', findDishesByRestaurant);
 }
