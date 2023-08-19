@@ -14,12 +14,16 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.post('/restaurants', registerRestaurant);
     app.post('/restaurants/session', loginAsRestaurant);
 
-    app.put('/restaurants', {
-        preHandler: [
-            isAuthenticatedMiddleware,
-            isRestaurantMiddleware
-        ]
-    }, editRestaurantData);
+    app.put(
+        '/restaurants',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        editRestaurantData
+    );
 
     app.get('/restaurants/nearby', findNearByRestaurants);
     app.get('/restaurants/filter', findRestaurantsByFilter);

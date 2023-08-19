@@ -28,7 +28,9 @@ export async function loginAsRestaurant(req: FastifyRequest, reply: FastifyReply
         }
 
         const token = await reply.jwtSign(
-            { type: 'RESTAURANT' },
+            {
+                type: 'RESTAURANT'
+            },
             {
                 sign: {
                     sub: restaurant.restaurant_id

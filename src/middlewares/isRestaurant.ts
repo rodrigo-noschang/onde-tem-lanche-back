@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function isRestaurantMiddleware(req: FastifyRequest, reply: FastifyReply) {
-    const { type } = req.user;
+    const type = req.user.type;
 
     if (type !== 'RESTAURANT') {
         return reply.status(401).send({

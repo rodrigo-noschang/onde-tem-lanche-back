@@ -16,6 +16,16 @@ export async function findUniqueRestaurantByEmail(email: string) {
     return existingRestaurant;
 }
 
+export async function findManyRestaurantsByEmail(email: string) {
+    const existingRestaurant = await prisma.restaurant.findMany({
+        where: {
+            email
+        }
+    })
+
+    return existingRestaurant.length;
+}
+
 export async function findUniqueRestaurantByPhone(phone: string) {
     const existingRestaurant = await prisma.restaurant.findUnique({
         where: {
@@ -24,6 +34,16 @@ export async function findUniqueRestaurantByPhone(phone: string) {
     })
 
     return existingRestaurant;
+}
+
+export async function findManyRestaurantsByPhone(phone: string) {
+    const existingRestaurant = await prisma.restaurant.findMany({
+        where: {
+            phone
+        }
+    })
+
+    return existingRestaurant.length;
 }
 
 export async function saveRestaurant(data: Prisma.RestaurantUncheckedCreateInput) {

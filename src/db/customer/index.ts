@@ -16,3 +16,22 @@ export async function findUniqueCustomerByEmail(email: string) {
 
     return existingEmail;
 }
+
+export async function findManyCustomersByEmail(email: string) {
+    const emails = await prisma.customer.findMany({
+        where: {
+            email
+        }
+    })
+
+    return emails.length;
+}
+
+export async function updateCustomerData(data: Prisma.CustomerUpdateInput, customer_id: string) {
+    await prisma.customer.update({
+        where: {
+            customer_id
+        },
+        data
+    })
+}

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
-import { findUniqueRestaurantByEmail, findUniqueRestaurantByPhone, updateRestaurantData } from "../../db/restaurants";
+import { findManyRestaurantsByEmail, findManyRestaurantsByPhone, updateRestaurantData } from "../../db/restaurants";
 
 import { PhoneAlreadyRegisteredError } from "../../errors/phoneAlreadyRegistered";
 import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
@@ -28,17 +28,17 @@ export async function editRestaurantData(req: FastifyRequest, reply: FastifyRepl
 
     try {
         if (data.phone) {
-            const isPhoneRegistered = await findUniqueRestaurantByPhone(data.phone);
+            const registeredPhones = await findManyRestaurantsByPhone(data.phone);
 
-            if (isPhoneRegistered) {
+            if (registeredPhones >= 1) {
                 throw new PhoneAlreadyRegisteredError();
             }
         }
 
         if (data.email) {
-            const isEmailRegistered = await findUniqueRestaurantByEmail(data.email);
+            const registeredEmails = await findManyRestaurantsByEmail(data.email);
 
-            if (isEmailRegistered) {
+            if (registeredEmails >= 1) {
                 throw new EmailAlreadyRegisteredError();
             }
         }

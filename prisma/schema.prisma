@@ -82,7 +82,7 @@ model Favorite {
 model Customer {
   customer_id   String   @id @default(uuid())
   name          String
-  email         String
+  email         String   @unique
   password_hash String
   preferences   String[] // FoodOptions
   allergens     String[] // Allergenics
