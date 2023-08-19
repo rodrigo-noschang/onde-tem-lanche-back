@@ -6,7 +6,7 @@ import { Preferences } from "../../static";
 
 const AMOUNT_PER_PAGE = 20;
 
-export async function findUniqueById(restaurant_id: string) {
+export async function findUniqueRestaurantById(restaurant_id: string) {
     const restaurant = await prisma.restaurant.findUnique({
         where: {
             restaurant_id

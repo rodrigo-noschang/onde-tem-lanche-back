@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findUniqueById } from "../../db/restaurants";
+import { findUniqueRestaurantById } from "../../db/restaurants";
 
 interface FindByIdParams {
     restaurant_id: string
 }
 
-export async function findUniqueRestaurantById(req: FastifyRequest, reply: FastifyReply) {
+export async function findRestaurantById(req: FastifyRequest, reply: FastifyReply) {
     const params: FindByIdParams = req.params as FindByIdParams;
 
     const findByIdSchema = z.object({
@@ -17,7 +17,7 @@ export async function findUniqueRestaurantById(req: FastifyRequest, reply: Fasti
     const data = findByIdSchema.parse(params);
 
     try {
-        const restaurant = await findUniqueById(data.restaurant_id);
+        const restaurant = await findUniqueRestaurantById(data.restaurant_id);
 
         if (!restaurant) {
             return reply.status(404).send({

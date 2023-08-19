@@ -30,8 +30,8 @@ model Dish {
   allergens      String[] // Allergenics 
   specifications String[] // Specifications
   ratings        Int[]
-  size           Decimal
-  size_unit      String
+  size           Decimal?
+  size_unit      String?
 
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade, onUpdate: Cascade)
   restaurant_id String
@@ -39,7 +39,7 @@ model Dish {
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  Favorite Favorite[]
+  favorite Favorite[]
 
   @@index([description, specifications, price])
   @@map("dishes")
@@ -60,8 +60,8 @@ model Restaurant {
   menu           Dish[]
   operation_hour OperationHour[]
 
-  created_at DateTime  @default(now())
-  updated_at DateTime?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@index([name, description, serves, lat, lng])
   @@map("restaurants")

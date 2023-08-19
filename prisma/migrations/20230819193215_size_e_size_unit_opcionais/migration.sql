@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "dishes" ALTER COLUMN "size" DROP NOT NULL,
+ALTER COLUMN "size_unit" DROP NOT NULL;

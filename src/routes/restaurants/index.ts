@@ -4,8 +4,8 @@ import { rateRestaurant } from "../../controllers/restaurants/rate";
 import { loginAsRestaurant } from "../../controllers/restaurants/login";
 import { registerRestaurant } from "../../controllers/restaurants/register";
 import { editRestaurantData } from "../../controllers/restaurants/edit-data";
+import { findRestaurantById } from "../../controllers/restaurants/find-by-id";
 import { findNearByRestaurants } from "../../controllers/restaurants/find-near-by";
-import { findUniqueRestaurantById } from "../../controllers/restaurants/find-by-id";
 import { findRestaurantBySearch } from "../../controllers/restaurants/find-by-search";
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
 
@@ -42,5 +42,5 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants', findRestaurantBySearch);
     app.get('/restaurants/nearby', findNearByRestaurants);
     app.get('/restaurants/filter', findRestaurantsByFilter);
-    app.get('/restaurants/:restaurant_id', findUniqueRestaurantById);
+    app.get('/restaurants/:restaurant_id', findRestaurantById);
 }
