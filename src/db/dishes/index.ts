@@ -25,3 +25,16 @@ export async function updateDishData(data: Prisma.DishUpdateInput, dish_id: stri
         data
     })
 }
+
+export async function updateDishRatings(rate: number, dish_id: string) {
+    await prisma.dish.update({
+        where: {
+            dish_id
+        },
+        data: {
+            ratings: {
+                push: rate
+            }
+        }
+    })
+}

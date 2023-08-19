@@ -1,8 +1,12 @@
 import { FastifyInstance } from "fastify";
+
+import { rateDish } from "../../controllers/dishes/rate";
 import { registerDish } from "../../controllers/dishes/register";
-import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
-import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { editDishData } from "../../controllers/dishes/edit-data";
+
+import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
+import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
+import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 
 export async function dishesRoutes(app: FastifyInstance) {
     app.post(
@@ -26,4 +30,15 @@ export async function dishesRoutes(app: FastifyInstance) {
         },
         editDishData
     );
+
+    app.patch(
+        '/dishes/:dish_id',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isCustomerMiddleware
+            ]
+        },
+        rateDish
+    )
 }
