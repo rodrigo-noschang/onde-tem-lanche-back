@@ -7,6 +7,7 @@ import { editDishData } from "../../controllers/dishes/edit-data";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { isCustomerMiddleware } from "../../middlewares/isCustomer";
+import { findDishesByRestaurant } from "../../controllers/dishes/find-by-restaurants";
 
 export async function dishesRoutes(app: FastifyInstance) {
     app.post(
@@ -40,5 +41,7 @@ export async function dishesRoutes(app: FastifyInstance) {
             ]
         },
         rateDish
-    )
+    );
+
+    app.get('/dishes/:restaurant_id', findDishesByRestaurant);
 }
