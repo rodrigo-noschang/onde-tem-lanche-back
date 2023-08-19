@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { findManyRestaurantsByQuery } from "../../db/restaurants";
 
 interface FindRestaurantBySearchParams {
-    q: string,
+    q?: string,
     page?: number
 }
 
@@ -11,7 +11,7 @@ export async function findRestaurantBySearch(req: FastifyRequest, reply: Fastify
     const query: FindRestaurantBySearchParams = req.query as FindRestaurantBySearchParams;
 
     const findRestaurantBySearchSchema = z.object({
-        q: z.string(),
+        q: z.string().default(''),
         page: z.coerce.number().default(1)
     })
 
