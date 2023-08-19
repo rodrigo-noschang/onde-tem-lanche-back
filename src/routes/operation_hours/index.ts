@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 
 import { updateRestaurantOperationHours } from "../../controllers/operation_hours/create";
+import { findRestaurantHoursByRestaurantId } from "../../controllers/operation_hours/findByRestaurantId";
 
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
@@ -11,5 +12,7 @@ export async function operationHoursRoutes(app: FastifyInstance) {
             isAuthenticatedMiddleware,
             isRestaurantMiddleware
         ]
-    }, updateRestaurantOperationHours)
+    }, updateRestaurantOperationHours);
+
+    app.get('/restaurants/operation_hours/:restaurant_id', findRestaurantHoursByRestaurantId);
 }

@@ -6,3 +6,13 @@ export async function createHour(data: Prisma.OperationHourUncheckedCreateInput[
         data
     });
 }
+
+export async function findManyHoursByRestaurantId(restaurant_id: string) {
+    const hours = await prisma.operationHour.findMany({
+        where: {
+            restaurant_id
+        }
+    })
+
+    return hours;
+}
