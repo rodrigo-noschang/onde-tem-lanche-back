@@ -2,36 +2,38 @@ import { z } from "zod";
 import bcrypt from 'bcrypt';
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findUniqueRestaurantByEmail } from "../../db/restaurants";
+import { findUniqueCustomerByEmail } from "../../db/customer";
+
 import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPassword";
 
-export async function loginAsRestaurant(req: FastifyRequest, reply: FastifyReply) {
+export async function loginAsCustomer(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;
 
     const loginSchema = z.object({
-        email: z.string().email('Formato de email inválido'),
-        password: z.string().min(8, 'A senha deve ter no mínimo 8 caractéres')
+        email: z.string().email('formato de email inválido'),
+        password: z.string().min(8, 'password deve ter ao menos 8 caractéres')
     });
 
     const data = loginSchema.parse(requestData);
 
     try {
-        const restaurant = await findUniqueRestaurantByEmail(data.email);
-        if (!restaurant) {
+        const registeredEmail = await findUniqueCustomerByEmail(data.email);
+
+        if (!registeredEmail) {
             throw new InvalidEmailOrPassword();
         }
 
-        const passwordMatch = await bcrypt.compare(data.password, restaurant.password_hash);
+        const passwordMatch = await bcrypt.compare(data.password, registeredEmail.password_hash);
 
         if (!passwordMatch) {
             throw new InvalidEmailOrPassword();
         }
 
         const token = await reply.jwtSign(
-            { type: 'RESTAURANT' },
+            { type: 'CUSTOMER' },
             {
                 sign: {
-                    sub: restaurant.restaurant_id
+                    sub: registeredEmail.customer_id
                 }
             }
         )
