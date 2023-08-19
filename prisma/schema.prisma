@@ -27,7 +27,7 @@ model Dish {
   name           String
   description    String?
   price          Decimal  @db.Money
-  allergenics    String[] // Allergenics 
+  allergens      String[] // Allergenics 
   specifications String[] // Specifications
   ratings        Int[]
   size           Decimal
@@ -85,9 +85,9 @@ model Customer {
   email         String
   password_hash String
   preferences   String[] // FoodOptions
-  allergenics   String[] // Allergenics
+  allergens     String[] // Allergenics
 
-  Favorites Favorite[]
+  favorites Favorite[]
 
   @@map("customers")
 }

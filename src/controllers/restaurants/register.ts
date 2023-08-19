@@ -35,7 +35,7 @@ export async function registerRestaurant(req: FastifyRequest, res: FastifyReply)
 
     } catch (error) {
         if (error instanceof EmailAlreadyRegisteredError) {
-            return res.status(400).send({
+            return res.status(401).send({
                 message: error.message
             })
         }
