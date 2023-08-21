@@ -1,19 +1,17 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { findUniqueDishById, updateDishData } from "../../db/dishes";
-import { DishNotFoundError } from "../../errors/dishNotFound";
-import { CreatorOnlyError } from "../../errors/creatorOnly";
+import { FastifyReply, FastifyRequest } from "fastify";
 
-interface EditDishDataParams {
-    dish_id: string
-}
+import { findUniqueDishById, updateDishData } from "../../db/dishes";
+
+import { CreatorOnlyError } from "../../errors/creatorOnly";
+import { DishNotFoundError } from "../../errors/dishNotFound";
 
 export async function editDishData(req: FastifyRequest, reply: FastifyReply) {
-    const restaurant_id = req.user.sub;
+    const restaurantId = req.user.sub;
     const requestData = req.body;
-    const params: EditDishDataParams = req.params as EditDishDataParams;
+    const params = req.params;
 
-    const registerDishSchema = z.object({
+    const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres').optional(),
         price: z.coerce.number().min(0, 'price não pode ser menor que zero').optional(),
         allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amenoim', 'Gluten', 'Leite', 'Não contém']).array().optional(),
@@ -25,20 +23,26 @@ export async function editDishData(req: FastifyRequest, reply: FastifyReply) {
         categories: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     })
 
-    const data = registerDishSchema.parse(requestData);
+    const paramsSchema = z.object({
+        dishId: z.string().uuid()
+    })
+
+    const data = bodySchema.parse(requestData);
+
+    const { dishId } = paramsSchema.parse(params);
 
     try {
-        const dish = await findUniqueDishById(params.dish_id);
+        const dish = await findUniqueDishById(dishId);
 
         if (!dish) {
             throw new DishNotFoundError();
         }
 
-        if (dish.restaurant_id !== restaurant_id) {
+        if (dish.restaurant_id !== restaurantId) {
             throw new CreatorOnlyError();
         }
 
-        await updateDishData(data, params.dish_id);
+        await updateDishData(data, dishId);
 
         return reply.status(204).send();
 

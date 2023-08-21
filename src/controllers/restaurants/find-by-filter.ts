@@ -10,13 +10,13 @@ interface FindRestaurantsByFilterProps {
 }
 
 export async function findRestaurantsByFilter(req: FastifyRequest, reply: FastifyReply) {
-    const query: FindRestaurantsByFilterProps = req.query as FindRestaurantsByFilterProps;
+    const query = req.query as FindRestaurantsByFilterProps;
     const formattedQuery = {
         preferences: query.preferences ? Array.isArray(query.preferences) ? query.preferences : [query.preferences] : [],
         page: query.page
     }
 
-    const findRestaurantByFilterSchema = z.object({
+    const querySchema = z.object({
         preferences: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês'])
             .array()
             .optional()
@@ -24,7 +24,7 @@ export async function findRestaurantsByFilter(req: FastifyRequest, reply: Fastif
         page: z.coerce.number().min(1).default(1)
     })
 
-    const data = findRestaurantByFilterSchema.parse(formattedQuery);
+    const data = querySchema.parse(formattedQuery);
 
     const restaurants = await findManyRestaurantsByFilter({
         preferences: data.preferences,

@@ -9,12 +9,12 @@ import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPassword";
 export async function loginAsCustomer(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;
 
-    const loginSchema = z.object({
+    const bodySchema = z.object({
         email: z.string().email('formato de email inválido'),
         password: z.string().min(8, 'password deve ter ao menos 8 caractéres')
     });
 
-    const data = loginSchema.parse(requestData);
+    const data = bodySchema.parse(requestData);
 
     try {
         const registeredEmail = await findUniqueCustomerByEmail(data.email);

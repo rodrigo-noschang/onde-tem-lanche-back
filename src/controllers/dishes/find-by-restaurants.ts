@@ -1,20 +1,25 @@
+import z from 'zod';
 import { FastifyReply, FastifyRequest } from "fastify";
+
 import { findManyDishesByRestaurantId } from "../../db/dishes";
 
-interface FindDishesByRestaurantParams {
-    restaurant_id: string,
-}
-
-interface FindDishesByRestaurantQuery {
-    page?: number
-}
-
 export async function findDishesByRestaurant(req: FastifyRequest, reply: FastifyReply) {
-    const params = req.params as FindDishesByRestaurantParams;
-    const query = req.query as FindDishesByRestaurantQuery;
+    const params = req.params;
+    const query = req.query;
+
+    const paramsSchema = z.object({
+        restaurantId: z.string().uuid()
+    })
+
+    const querySchema = z.object({
+        page: z.coerce.number().min(1).default(1)
+    })
+
+    const { restaurantId } = paramsSchema.parse(params);
+    const { page } = querySchema.parse(query);
 
     try {
-        const dishes = await findManyDishesByRestaurantId(params.restaurant_id, query.page ?? 1);
+        const dishes = await findManyDishesByRestaurantId(restaurantId, page);
 
         return reply.send({
             dishes

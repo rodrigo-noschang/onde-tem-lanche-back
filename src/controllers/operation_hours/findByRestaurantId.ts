@@ -1,21 +1,18 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
+import { FastifyReply, FastifyRequest } from "fastify";
+
 import { findManyHoursByRestaurantId } from "../../db/operation_hours";
 
-interface FindRestaurantHoursParams {
-    restaurant_id: string
-}
-
 export async function findRestaurantHoursByRestaurantId(req: FastifyRequest, reply: FastifyReply) {
-    const params: FindRestaurantHoursParams = req.params as FindRestaurantHoursParams;
+    const params = req.params;
 
-    const findRestaurantsHoursSchema = z.object({
+    const paramsSchema = z.object({
         restaurant_id: z.string()
     })
 
-    const data = findRestaurantsHoursSchema.parse(params);
+    const { restaurant_id } = paramsSchema.parse(params);
 
-    const operation_hours = await findManyHoursByRestaurantId(data.restaurant_id);
+    const operation_hours = await findManyHoursByRestaurantId(restaurant_id);
 
     return reply.send({
         operation_hours

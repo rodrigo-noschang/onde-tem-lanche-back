@@ -3,21 +3,17 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueRestaurantById } from "../../db/restaurants";
 
-interface FindByIdParams {
-    restaurant_id: string
-}
-
 export async function findRestaurantById(req: FastifyRequest, reply: FastifyReply) {
-    const params: FindByIdParams = req.params as FindByIdParams;
+    const params = req.params;
 
-    const findByIdSchema = z.object({
-        restaurant_id: z.string()
+    const paramsSchema = z.object({
+        restaurantId: z.string().uuid()
     })
 
-    const data = findByIdSchema.parse(params);
+    const { restaurantId } = paramsSchema.parse(params);
 
     try {
-        const restaurant = await findUniqueRestaurantById(data.restaurant_id);
+        const restaurant = await findUniqueRestaurantById(restaurantId);
 
         if (!restaurant) {
             return reply.status(404).send({

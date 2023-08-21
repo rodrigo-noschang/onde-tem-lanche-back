@@ -1,23 +1,25 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
+import { FastifyReply, FastifyRequest } from "fastify";
+
 import { updateRestaurantRatings } from "../../db/restaurants";
 
-interface RateRestaurantParams {
-    restaurant_id: string
-}
-
 export async function rateRestaurant(req: FastifyRequest, reply: FastifyReply) {
-    const params: RateRestaurantParams = req.params as RateRestaurantParams;
+    const params = req.params;
     const requestData = req.body;
 
-    const rateRestaurantsSchema = z.object({
+    const bodySchema = z.object({
         rate: z.coerce.number().min(0, 'rate deve estar entre 0 e 5').max(5, 'rate deve estar entre 0 e 5')
     });
 
-    const data = rateRestaurantsSchema.parse(requestData);
+    const paramsSchema = z.object({
+        restaurantId: z.string().uuid()
+    })
+
+    const data = bodySchema.parse(requestData);
+    const { restaurantId } = paramsSchema.parse(params);
 
     try {
-        await updateRestaurantRatings(data.rate, params.restaurant_id);
+        await updateRestaurantRatings(data.rate, restaurantId);
 
         return reply.status(204).send();
 

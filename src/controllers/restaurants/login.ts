@@ -8,12 +8,12 @@ import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPassword";
 export async function loginAsRestaurant(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;
 
-    const loginSchema = z.object({
+    const bodySchema = z.object({
         email: z.string().email('Formato de email inválido'),
         password: z.string().min(8, 'A senha deve ter no mínimo 8 caractéres')
     });
 
-    const data = loginSchema.parse(requestData);
+    const data = bodySchema.parse(requestData);
 
     try {
         const restaurant = await findUniqueRestaurantByEmail(data.email);

@@ -1,7 +1,11 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
+import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findManyRestaurantsByEmail, findManyRestaurantsByPhone, updateRestaurantData } from "../../db/restaurants";
+import {
+    findManyRestaurantsByEmail,
+    findManyRestaurantsByPhone,
+    updateRestaurantData
+} from "../../db/restaurants";
 
 import { PhoneAlreadyRegisteredError } from "../../errors/phoneAlreadyRegistered";
 import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
@@ -10,7 +14,7 @@ export async function editRestaurantData(req: FastifyRequest, reply: FastifyRepl
     const requestData = req.body;
     const restaurantId = req.user.sub;
 
-    const editRestaurantSchema = z.object({
+    const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres').optional(),
         phone: z.string().length(11, 'Phone deve ter 11 caractéres').optional(),
         email: z.string().email('Formatação de email inválido').optional(),
@@ -20,7 +24,7 @@ export async function editRestaurantData(req: FastifyRequest, reply: FastifyRepl
         description: z.string().max(200, 'Description deve ter no máximo 200 caractéres').optional()
     })
 
-    const data = editRestaurantSchema.parse(requestData);
+    const data = bodySchema.parse(requestData);
     const updateData = {
         ...data,
         updated_at: new Date()

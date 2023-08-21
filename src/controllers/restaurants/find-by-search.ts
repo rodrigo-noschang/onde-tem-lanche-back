@@ -1,25 +1,21 @@
 import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
+
 import { findManyRestaurantsByQuery } from "../../db/restaurants";
 
-interface FindRestaurantBySearchParams {
-    q?: string,
-    page?: number
-}
-
 export async function findRestaurantBySearch(req: FastifyRequest, reply: FastifyReply) {
-    const query: FindRestaurantBySearchParams = req.query as FindRestaurantBySearchParams;
+    const query = req.query;
 
-    const findRestaurantBySearchSchema = z.object({
+    const querySchema = z.object({
         q: z.string().default(''),
         page: z.coerce.number().default(1)
     })
 
-    const data = findRestaurantBySearchSchema.parse(query);
+    const { q, page } = querySchema.parse(query);
 
-    const formattedQuery = data.q.trim();
+    const formattedQuery = q.trim();
 
-    const restaurants = await findManyRestaurantsByQuery(formattedQuery, data.page);
+    const restaurants = await findManyRestaurantsByQuery(formattedQuery, page);
 
     return reply.send({
         restaurants

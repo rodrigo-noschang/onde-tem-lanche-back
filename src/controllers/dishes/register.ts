@@ -1,12 +1,13 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
+import { FastifyReply, FastifyRequest } from "fastify";
+
 import { saveDish } from "../../db/dishes";
 
 export async function registerDish(req: FastifyRequest, reply: FastifyReply) {
-    const restaurant_id = req.user.sub;
+    const restaurantId = req.user.sub;
     const requestData = req.body;
 
-    const registerDishSchema = z.object({
+    const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres'),
         price: z.coerce.number().min(0, 'price não pode ser menor que zero'),
         allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amenoim', 'Gluten', 'Leite', 'Não contém']).array(),
@@ -18,10 +19,11 @@ export async function registerDish(req: FastifyRequest, reply: FastifyReply) {
         categories: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     })
 
-    const data = registerDishSchema.parse(requestData);
+    const data = bodySchema.parse(requestData);
+
     const formattedData = {
         ...data,
-        restaurant_id
+        restaurant_id: restaurantId
     }
 
     try {

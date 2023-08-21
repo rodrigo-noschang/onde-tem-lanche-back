@@ -9,14 +9,14 @@ export async function editCustomerData(req: FastifyRequest, reply: FastifyReply)
     const customerId = req.user.sub;
     const requestData = req.body;
 
-    const editCustomerDataSchema = z.object({
+    const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres').optional(),
         email: z.string().email('formato de email inválido').optional(),
         allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amenoim', 'Gluten', 'Leite', 'Não contém']).array().optional(),
         preferences: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     })
 
-    const data = editCustomerDataSchema.parse(requestData);
+    const data = bodySchema.parse(requestData);
 
     try {
         if (data.email) {
