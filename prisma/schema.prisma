@@ -29,6 +29,7 @@ model Dish {
   price          Decimal  @db.Money
   allergens      String[] // Allergenics 
   specifications String[] // Specifications
+  categories     String[] // FoodOptions
   ratings        Int[]
   size           Decimal?
   size_unit      String?
