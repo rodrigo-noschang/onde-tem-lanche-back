@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "..";
 
+import { ALL_PREFERENCES, Allergens, Preferences } from "../../static";
+
 const AMOUNT_PER_PAGE = 20;
 
 export async function saveDish(data: Prisma.DishUncheckedCreateInput) {
@@ -51,4 +53,62 @@ export async function findManyDishesByRestaurantId(restaurant_id: string, page: 
     })
 
     return dishes;
+}
+
+export async function findManyDishesByAllergens(allergens: Allergens[]) {
+    const allergensQuery = allergens.includes('Não contém') ? [] : allergens;
+
+    const dishes = await prisma.dish.findMany({
+        where: {
+            NOT: {
+                allergens: {
+                    hasSome: allergensQuery
+                }
+            }
+        }
+    })
+
+    return dishes;
+}
+
+export async function findManyDishesByPreferences(preferences: Preferences[]) {
+    const queryPreferences = preferences.length > 0 ? preferences : ALL_PREFERENCES;
+
+    const dishes = await prisma.dish.findMany({
+        where: {
+            categories: {
+                hasSome: queryPreferences
+            }
+        }
+    })
+
+    return dishes;
+}
+
+interface FindManyDishesByFilterParams {
+    preferences: Preferences[],
+    allergens: Allergens[],
+    page: number
+}
+
+export async function findManyDishesByAllergensAndPreferences({ allergens, preferences, page }: FindManyDishesByFilterParams) {
+    const queryPreferences = preferences.length > 0 ? preferences : ALL_PREFERENCES;
+    const queryAllergens = allergens.includes('Não contém') ? [] : allergens;
+
+    const other = await prisma.dish.findMany({
+        where: {
+            categories: {
+                hasSome: queryPreferences,
+            },
+            NOT: {
+                allergens: {
+                    hasSome: queryAllergens
+                }
+            }
+        },
+        take: page * AMOUNT_PER_PAGE,
+        skip: (page - 1) * AMOUNT_PER_PAGE
+    })
+
+    return other;
 }

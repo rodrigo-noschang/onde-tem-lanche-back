@@ -10,7 +10,7 @@ export async function registerDish(req: FastifyRequest, reply: FastifyReply) {
     const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres'),
         price: z.coerce.number().min(0, 'price não pode ser menor que zero'),
-        allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amenoim', 'Gluten', 'Leite', 'Não contém']).array(),
+        allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amendoim', 'Gluten', 'Leite', 'Não contém']).array(),
 
         description: z.string().max(200, 'description deve ter no máximo 200 caractéres').optional(),
         specifications: z.enum(['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose']).array().optional(),

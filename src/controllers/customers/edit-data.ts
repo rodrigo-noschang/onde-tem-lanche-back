@@ -12,7 +12,7 @@ export async function editCustomerData(req: FastifyRequest, reply: FastifyReply)
     const bodySchema = z.object({
         name: z.string().max(40, 'name deve ter no máximo 40 caractéres').optional(),
         email: z.string().email('formato de email inválido').optional(),
-        allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amenoim', 'Gluten', 'Leite', 'Não contém']).array().optional(),
+        allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amendoim', 'Gluten', 'Leite', 'Não contém']).array().optional(),
         preferences: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     })
 

@@ -24,11 +24,11 @@ export async function findRestaurantsByFilter(req: FastifyRequest, reply: Fastif
         page: z.coerce.number().min(1).default(1)
     })
 
-    const data = querySchema.parse(formattedQuery);
+    const { preferences, page } = querySchema.parse(formattedQuery);
 
     const restaurants = await findManyRestaurantsByFilter({
-        preferences: data.preferences,
-        page: data.page
+        preferences: preferences,
+        page: page
     })
 
     return reply.send({
