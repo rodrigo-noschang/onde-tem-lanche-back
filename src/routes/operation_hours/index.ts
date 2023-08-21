@@ -14,5 +14,5 @@ export async function operationHoursRoutes(app: FastifyInstance) {
         ]
     }, updateRestaurantOperationHours);
 
-    app.get('/restaurants/operation_hours/:restaurant_id', findRestaurantHoursByRestaurantId);
+    app.get('/restaurants/operation_hours/:restaurantId', findRestaurantHoursByRestaurantId);
 }

@@ -23,7 +23,7 @@ export async function dishesRoutes(app: FastifyInstance) {
     );
 
     app.put(
-        '/dishes/:dish_id',
+        '/dishes/:dishId',
         {
             preHandler: [
                 isAuthenticatedMiddleware,
@@ -34,7 +34,7 @@ export async function dishesRoutes(app: FastifyInstance) {
     );
 
     app.patch(
-        '/dishes/:dish_id',
+        '/dishes/:dishId',
         {
             preHandler: [
                 isAuthenticatedMiddleware,
@@ -44,6 +44,6 @@ export async function dishesRoutes(app: FastifyInstance) {
         rateDish
     );
 
-    app.get('/dishes/:dish_id', findDishById);
+    app.get('/dishes/:dishId', findDishById);
     app.get('/dishes/restaurant_dishes/:restaurant_id', findDishesByRestaurant);
 }

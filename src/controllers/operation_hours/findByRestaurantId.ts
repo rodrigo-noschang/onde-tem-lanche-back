@@ -7,12 +7,12 @@ export async function findRestaurantHoursByRestaurantId(req: FastifyRequest, rep
     const params = req.params;
 
     const paramsSchema = z.object({
-        restaurant_id: z.string()
+        restaurantId: z.string()
     })
 
-    const { restaurant_id } = paramsSchema.parse(params);
+    const { restaurantId } = paramsSchema.parse(params);
 
-    const operation_hours = await findManyHoursByRestaurantId(restaurant_id);
+    const operation_hours = await findManyHoursByRestaurantId(restaurantId);
 
     return reply.send({
         operation_hours

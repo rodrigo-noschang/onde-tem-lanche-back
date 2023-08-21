@@ -29,7 +29,7 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     );
 
     app.patch(
-        '/restaurants/:restaurant_id',
+        '/restaurants/:restaurantId',
         {
             preHandler: [
                 isAuthenticatedMiddleware,
@@ -42,5 +42,5 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants', findRestaurantBySearch);
     app.get('/restaurants/nearby', findNearByRestaurants);
     app.get('/restaurants/filter', findRestaurantsByFilter);
-    app.get('/restaurants/:restaurant_id', findRestaurantById);
+    app.get('/restaurants/:restaurantId', findRestaurantById);
 }

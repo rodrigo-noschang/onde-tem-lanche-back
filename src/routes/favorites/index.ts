@@ -7,7 +7,7 @@ import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 
 export async function favoritesRoutes(app: FastifyInstance) {
     app.patch(
-        'dishes/favorite/dish_id',
+        '/favorite/dish/:dishId',
         {
             preHandler: [
                 isAuthenticatedMiddleware,
