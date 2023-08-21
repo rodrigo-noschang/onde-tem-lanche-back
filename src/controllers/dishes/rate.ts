@@ -33,5 +33,7 @@ export async function rateDish(req: FastifyRequest, reply: FastifyReply) {
                 message: error.message
             })
         }
+
+        throw error;
     }
 }

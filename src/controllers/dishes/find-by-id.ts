@@ -8,8 +8,6 @@ interface FindDishByIdParams {
 export async function findDishById(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params as FindDishByIdParams;
 
-    console.log('Veio -> ', params);
-
     const dish = await findUniqueDishById(params.dish_id);
 
     return reply.send({

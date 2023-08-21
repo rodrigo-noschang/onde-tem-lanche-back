@@ -45,5 +45,5 @@ export async function dishesRoutes(app: FastifyInstance) {
     );
 
     app.get('/dishes/:dish_id', findDishById);
-    app.get('/dishes/:restaurant_id', findDishesByRestaurant);
+    app.get('/dishes/restaurant_dishes/:restaurant_id', findDishesByRestaurant);
 }
