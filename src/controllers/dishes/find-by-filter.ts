@@ -40,9 +40,9 @@ export async function findDishesByFilter(req: FastifyRequest, reply: FastifyRepl
         const dishes = allergens.length && preferences.length ?
             await findManyDishesByAllergensAndPreferences({ allergens, preferences, page }) :
             allergens.length ?
-                await findManyDishesByAllergens(allergens) :
+                await findManyDishesByAllergens(allergens, page) :
                 preferences.length ?
-                    await findManyDishesByPreferences(preferences) :
+                    await findManyDishesByPreferences(preferences, page) :
                     [];
 
         return reply.send({

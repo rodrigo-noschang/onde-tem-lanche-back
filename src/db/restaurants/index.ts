@@ -2,7 +2,7 @@ import { Prisma, Restaurant } from "@prisma/client";
 
 import { prisma } from "..";
 
-import { Preferences } from "../../static";
+import { ALL_PREFERENCES, Preferences } from "../../static";
 
 const AMOUNT_PER_PAGE = 20;
 
@@ -110,10 +110,12 @@ interface FindManyByFilterProps {
 }
 
 export async function findManyRestaurantsByFilter({ preferences, page }: FindManyByFilterProps) {
+    const preferencesQuery = preferences.length > 0 ? preferences : ALL_PREFERENCES;
+
     const restaurants = await prisma.restaurant.findMany({
         where: {
             serves: {
-                hasSome: preferences
+                hasSome: preferencesQuery
             }
         },
         take: page * AMOUNT_PER_PAGE,
