@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import { FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
+import { FastifyRequest, FastifyReply } from 'fastify';
 
 export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params;
@@ -13,6 +13,8 @@ export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: Fa
 
     try {
         const image = fs.readFileSync(`src/assets/restaurant-images/restaurant-${restaurantId}.png`);
+
+
         return reply.type('image/png')
             .send(image);
 
