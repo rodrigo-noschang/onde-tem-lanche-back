@@ -31,7 +31,14 @@ export async function findRestaurantsByFilter(req: FastifyRequest, reply: Fastif
         page: page
     })
 
+    const restaurantsWithoutPassword = restaurants.map(res => {
+        return {
+            ...res,
+            password_hash: undefined
+        }
+    });
+
     return reply.send({
-        restaurants
+        restaurants: restaurantsWithoutPassword
     });
 }

@@ -116,7 +116,7 @@ export async function findManyRestaurantsByFilter({ preferences, page }: FindMan
         where: {
             serves: {
                 hasSome: preferencesQuery
-            }
+            },
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE

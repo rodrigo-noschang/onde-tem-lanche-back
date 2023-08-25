@@ -17,7 +17,14 @@ export async function findRestaurantBySearch(req: FastifyRequest, reply: Fastify
 
     const restaurants = await findManyRestaurantsByQuery(formattedQuery, page);
 
+    const restaurantsWithoutPassword = restaurants.map(res => {
+        return {
+            ...res,
+            password_hash: undefined
+        }
+    });
+
     return reply.send({
-        restaurants
-    })
+        restaurants: restaurantsWithoutPassword
+    });
 }

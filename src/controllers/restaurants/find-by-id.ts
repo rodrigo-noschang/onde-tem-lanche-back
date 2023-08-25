@@ -21,8 +21,13 @@ export async function findRestaurantById(req: FastifyRequest, reply: FastifyRepl
             });
         }
 
+        const restaurantWithoutPassword = {
+            ...restaurant,
+            password_hash: undefined
+        }
+
         return reply.send({
-            restaurant
+            restaurant: restaurantWithoutPassword
         })
 
     } catch (error) {
