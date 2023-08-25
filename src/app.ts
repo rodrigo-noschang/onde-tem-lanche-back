@@ -3,8 +3,6 @@ import { ZodError } from 'zod';
 import multer from 'fastify-multer';
 import fastifyJwt from '@fastify/jwt';
 import cors from '@fastify/cors';
-// import formbody from '@fastify/formbody';
-// import fastifyMultipart from '@fastify/multipart';
 
 import { env } from './env';
 

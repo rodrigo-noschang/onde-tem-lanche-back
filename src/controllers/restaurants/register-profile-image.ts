@@ -6,7 +6,7 @@ export async function registerProfileImage(req: FastifyRequest, reply: FastifyRe
     if (!file) {
         return reply.status(400).send({
             message: 'Faltou a imagem, irmão'
-        })
+        });
     }
 
     return reply.send('ok');
