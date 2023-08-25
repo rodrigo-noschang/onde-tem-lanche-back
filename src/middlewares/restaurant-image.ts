@@ -1,5 +1,5 @@
-import { randomUUID } from 'node:crypto';
 import multer from 'fastify-multer';
+import { InvalidImageFormatError } from '../errors/invalidImageFormatError';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -10,11 +10,20 @@ const storage = multer.diskStorage({
         const fileExtension = file.mimetype.split('/').pop();
 
         const restaurantId = req.user.sub;
-        const fileName = `${restaurantId}.${fileExtension}`;
+        const fileName = `restaurant-${restaurantId}.${fileExtension}`;
 
-        console.log('No middleware -> ', file);
         cb(null, fileName);
-    },
+    }
 })
 
-export const uploadRestaurantImageMiddleware = multer({ storage })
+export const uploadRestaurantImageMiddleware = multer({
+    storage,
+    fileFilter: function (req, file, cb) {
+        const extension = file.mimetype.split('/').pop();
+        if (extension !== 'png' && extension !== 'jpg' && extension !== 'jpeg') {
+            return cb(new InvalidImageFormatError());
+        }
+
+        cb(null, true);
+    }
+})

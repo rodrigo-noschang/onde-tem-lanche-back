@@ -1,4 +1,3 @@
-
 import { FastifyInstance } from "fastify";
 
 import { rateRestaurant } from "../../controllers/restaurants/rate";
@@ -58,5 +57,15 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants/nearby', findNearByRestaurants);
     app.get('/restaurants/filter', findRestaurantsByFilter);
     app.get('/restaurants/:restaurantId', findRestaurantById);
-    app.get('/restaurants/image', fetchRestaurantProfileImage);
+    app.get(
+        '/restaurants/image',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware,
+                uploadRestaurantImageMiddleware.single('image')
+            ]
+        },
+        fetchRestaurantProfileImage
+    );
 }
