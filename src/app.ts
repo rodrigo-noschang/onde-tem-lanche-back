@@ -32,7 +32,7 @@ app.register(fastifyJwt, {
 })
 
 app.setErrorHandler((error, _, reply) => {
-    if (env.NODE_ENV === 'production') {
+    if (env.NODE_ENV === 'development') {
         console.log(error);
     }
 

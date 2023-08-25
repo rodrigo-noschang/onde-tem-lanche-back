@@ -58,7 +58,7 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants/filter', findRestaurantsByFilter);
     app.get('/restaurants/:restaurantId', findRestaurantById);
     app.get(
-        '/restaurants/image/:restaurantId',
+        '/restaurants/image/:imagePath',
         {
             preHandler: [
                 uploadRestaurantImageMiddleware.single('image')

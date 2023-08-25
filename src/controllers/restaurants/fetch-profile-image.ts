@@ -6,14 +6,13 @@ export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: Fa
     const params = req.params;
 
     const paramsSchema = z.object({
-        restaurantId: z.string().uuid()
+        imagePath: z.string()
     })
 
-    const { restaurantId } = paramsSchema.parse(params);
+    const { imagePath } = paramsSchema.parse(params);
 
     try {
-        const image = fs.readFileSync(`src/assets/restaurant-images/restaurant-${restaurantId}.png`);
-
+        const image = fs.readFileSync(`src/assets/restaurant-images/${imagePath}`);
 
         return reply.type('image/png')
             .send(image);

@@ -8,9 +8,10 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const fileExtension = file.mimetype.split('/').pop();
+        const namePrefix = file.originalname.split('.')[0].split(' ').join('-').replace('_', '-').toLocaleLowerCase();
 
         const restaurantId = req.user.sub;
-        const fileName = `restaurant-${restaurantId}.${fileExtension}`;
+        const fileName = `${namePrefix}-${restaurantId}.${fileExtension}`;
 
         cb(null, fileName);
     }

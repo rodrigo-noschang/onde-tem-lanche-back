@@ -20,7 +20,8 @@ export async function findUniqueRestaurantById(restaurant_id: string) {
                     closes_at: true,
                 }
             },
-            menu: true
+            menu: true,
+            images: true
         }
     })
 
