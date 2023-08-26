@@ -1,8 +1,9 @@
 import fastify from 'fastify';
 import { ZodError } from 'zod';
+import cors from '@fastify/cors';
 import multer from 'fastify-multer';
 import fastifyJwt from '@fastify/jwt';
-import cors from '@fastify/cors';
+import { Prisma } from '@prisma/client';
 
 import { env } from './env';
 
@@ -46,6 +47,18 @@ app.setErrorHandler((error, _, reply) => {
     if (error instanceof InvalidImageFormatError) {
         return reply.status(400).send({
             message: error.message
+        })
+    }
+
+    if (error instanceof multer.MulterError) {
+        return reply.status(400).send({
+            message: error.message
+        })
+    }
+
+    if (error instanceof Prisma.PrismaClientInitializationError) {
+        return reply.status(500).send({
+            message: 'Não foi possível estabelecer conexão com o banco de dados'
         })
     }
 

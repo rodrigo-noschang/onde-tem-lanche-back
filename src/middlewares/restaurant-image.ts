@@ -26,5 +26,8 @@ export const uploadRestaurantImageMiddleware = multer({
         }
 
         cb(null, true);
+    },
+    limits: {
+        fileSize: 100000 // 100 KB
     }
 })
