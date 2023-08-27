@@ -58,5 +58,7 @@ export async function editDishData(req: FastifyRequest, reply: FastifyReply) {
                 message: error.message
             })
         }
+
+        throw error;
     }
 }

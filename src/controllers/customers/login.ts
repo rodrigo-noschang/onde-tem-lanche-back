@@ -48,5 +48,7 @@ export async function loginAsCustomer(req: FastifyRequest, reply: FastifyReply) 
                 message: error.message
             })
         }
+
+        throw error;
     }
 }

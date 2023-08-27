@@ -2,6 +2,7 @@ import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueDishById } from "../../db/dishes";
+import { DishNotFoundError } from "../../errors/dishNotFound";
 
 export async function findDishById(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params;
@@ -12,9 +13,19 @@ export async function findDishById(req: FastifyRequest, reply: FastifyReply) {
 
     const { dishId } = paramsSchema.parse(params);
 
-    const dish = await findUniqueDishById(dishId);
+    try {
+        const dish = await findUniqueDishById(dishId);
 
-    return reply.send({
-        dish
-    });
+        return reply.send({
+            dish
+        });
+    } catch (error) {
+        if (error instanceof DishNotFoundError) {
+            return reply.status(404).send({
+                message: error.message
+            });
+        }
+
+        throw error;
+    }
 }

@@ -116,3 +116,11 @@ export async function findManyDishesByAllergensAndPreferences({ allergens, prefe
 
     return other;
 }
+
+export async function removeDishById(dishId: string) {
+    await prisma.dish.delete({
+        where: {
+            dish_id: dishId
+        }
+    });
+}

@@ -37,6 +37,8 @@ export async function editCustomerData(req: FastifyRequest, reply: FastifyReply)
                 message: error.message
             });
         }
+
+        throw error;
     }
 
 

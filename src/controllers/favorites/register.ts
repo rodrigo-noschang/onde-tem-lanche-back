@@ -21,7 +21,7 @@ export async function favoriteADish(req: FastifyRequest, reply: FastifyReply) {
 
         return reply.status(204).send()
     } catch (error) {
-
+        throw error;
     }
 
 }

@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 
 import { rateDish } from "../../controllers/dishes/rate";
+import { deleteDish } from "../../controllers/dishes/delete";
 import { registerDish } from "../../controllers/dishes/register";
 import { editDishData } from "../../controllers/dishes/edit-data";
 import { findDishById } from "../../controllers/dishes/find-by-id";
@@ -47,5 +48,16 @@ export async function dishesRoutes(app: FastifyInstance) {
 
     app.get('/dishes/:dishId', findDishById);
     app.get('/dishes/filter', findDishesByFilter);
-    app.get('/dishes/restaurant_dishes/:restaurant_id', findDishesByRestaurant);
+    app.get('/dishes/restaurant_dishes/:restaurantId', findDishesByRestaurant);
+
+    app.delete(
+        '/dishes/:dishId',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        deleteDish
+    )
 }

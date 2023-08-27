@@ -44,5 +44,7 @@ export async function registerCustomer(req: FastifyRequest, reply: FastifyReply)
                 message: error.message
             })
         }
+
+        throw error;
     }
 }

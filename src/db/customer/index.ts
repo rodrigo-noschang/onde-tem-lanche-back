@@ -7,6 +7,16 @@ export async function saveCustomer(data: Prisma.CustomerCreateInput) {
     });
 }
 
+export async function findUniqueCustomerById(customerId: string) {
+    const customer = await prisma.customer.findUnique({
+        where: {
+            customer_id: customerId
+        }
+    })
+
+    return customer;
+}
+
 export async function findUniqueCustomerByEmail(email: string) {
     const existingEmail = await prisma.customer.findFirst({
         where: {
