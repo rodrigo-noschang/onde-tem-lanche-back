@@ -164,3 +164,11 @@ export async function updateRestaurantRatings(rate: number, restaurant_id: strin
         }
     })
 }
+
+export async function removeRestaurantById(restaurantId: string) {
+    await prisma.restaurant.delete({
+        where: {
+            restaurant_id: restaurantId
+        }
+    });
+}

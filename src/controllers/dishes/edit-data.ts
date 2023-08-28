@@ -18,7 +18,7 @@ export async function editDishData(req: FastifyRequest, reply: FastifyReply) {
 
         description: z.string().max(200, 'description deve ter no máximo 200 caractéres').optional(),
         specifications: z.enum(['Vegetariano', 'Vegano', 'Sem glúten', 'Sem lactose']).array().optional(),
-        size: z.coerce.number().min(1, 'number deve ser pelo menos 1').optional(),
+        size: z.coerce.number().min(1, 'number deve ser pelo menos 1').max(1000, 'number deve ser no máximo 1000').optional(),
         size_unit: z.enum(['g', 'kg', 'ml', 'L', 'unidade', 'pedaços']).optional(),
         categories: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     })

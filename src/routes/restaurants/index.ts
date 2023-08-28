@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 
 import { rateRestaurant } from "../../controllers/restaurants/rate";
+import { deleteRestaurant } from "../../controllers/restaurants/delete";
 import { loginAsRestaurant } from "../../controllers/restaurants/login";
 import { registerRestaurant } from "../../controllers/restaurants/register";
 import { editRestaurantData } from "../../controllers/restaurants/edit-data";
@@ -66,4 +67,14 @@ export async function restaurantsRoutes(app: FastifyInstance) {
         },
         fetchRestaurantProfileImage
     );
+
+    app.delete(
+        '/restaurants',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        deleteRestaurant);
 }
