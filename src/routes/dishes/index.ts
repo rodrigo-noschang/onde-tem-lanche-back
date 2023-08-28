@@ -6,13 +6,26 @@ import { registerDish } from "../../controllers/dishes/register";
 import { editDishData } from "../../controllers/dishes/edit-data";
 import { findDishById } from "../../controllers/dishes/find-by-id";
 import { findDishesByFilter } from "../../controllers/dishes/find-by-filter";
+import { registerDishImage } from "../../controllers/customers/register-image";
 import { findDishesByRestaurant } from "../../controllers/dishes/find-by-restaurants";
 
 import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
+import { uploadDishImageMiddleware } from "../../middlewares/dish-image";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 
 export async function dishesRoutes(app: FastifyInstance) {
+    app.post(
+        '/dishes/image/:dishId',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware,
+                uploadDishImageMiddleware.single('image')
+            ]
+        },
+        registerDishImage
+    );
     app.post(
         '/dishes',
         {
@@ -59,5 +72,6 @@ export async function dishesRoutes(app: FastifyInstance) {
             ]
         },
         deleteDish
-    )
+    );
+    // app.delete()
 }

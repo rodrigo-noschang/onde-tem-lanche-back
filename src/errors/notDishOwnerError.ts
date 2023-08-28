@@ -1,5 +1,5 @@
 export class NotDishOwnerError extends Error {
-    message = 'apenas o criador do prato pode deletá-lo'
+    message = 'essa operação só é permitida para o criador do prato';
 
     constructor() {
         super();

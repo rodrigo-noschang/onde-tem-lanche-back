@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findUniqueImageByPath, saveRestaurantProfileImagePath } from "../../db/images";
+import { findUniqueImageByPath, saveImagePath } from "../../db/images";
 
 import { InvalidImageNameError } from "../../errors/invalidImageNameError";
 
@@ -10,7 +10,7 @@ export async function registerProfileImage(req: FastifyRequest, reply: FastifyRe
 
     if (!file) {
         return reply.status(400).send({
-            message: 'requisicao sem imagem'
+            message: 'requisição sem imagem'
         });
     }
 
@@ -19,7 +19,7 @@ export async function registerProfileImage(req: FastifyRequest, reply: FastifyRe
 
         if (imageAlreadyRegistered) throw new InvalidImageNameError();
 
-        await saveRestaurantProfileImagePath({
+        await saveImagePath({
             path: file.filename,
             restaurant_id: restaurantId
         })

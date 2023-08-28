@@ -7,3 +7,4 @@ export type WeekDays = 'Segunda-feira' | 'Terça-feira' | 'Quarta-feira' | 'Quin
 export const ALL_PREFERENCES = ['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês'];
 
 export const RESTAURANT_IMAGE_BASE_URL = './src/assets/restaurant-images/';
+export const DISH_IMAGE_BASE_URL = './src/assets/dishes-images/';
