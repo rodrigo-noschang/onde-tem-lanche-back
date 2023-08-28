@@ -15,6 +15,9 @@ export async function findUniqueDishById(dish_id: string) {
     const dish = await prisma.dish.findUnique({
         where: {
             dish_id
+        },
+        include: {
+            images: true,
         }
     })
 
