@@ -4,7 +4,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueCustomerByEmail } from "../../db/customer";
 
-import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPassword";
+import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPasswordError";
 
 export async function loginAsCustomer(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;

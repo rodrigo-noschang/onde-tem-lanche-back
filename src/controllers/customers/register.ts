@@ -4,7 +4,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueCustomerByEmail, saveCustomer } from "../../db/customer";
 
-import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
+import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegisteredError";
 
 export async function registerCustomer(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;

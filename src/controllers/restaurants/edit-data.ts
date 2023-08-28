@@ -7,8 +7,8 @@ import {
     updateRestaurantData
 } from "../../db/restaurants";
 
-import { PhoneAlreadyRegisteredError } from "../../errors/phoneAlreadyRegistered";
-import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
+import { PhoneAlreadyRegisteredError } from "../../errors/phoneAlreadyRegisteredError";
+import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegisteredError";
 
 export async function editRestaurantData(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;

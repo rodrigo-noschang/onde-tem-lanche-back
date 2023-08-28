@@ -2,7 +2,7 @@ import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueDishById } from "../../db/dishes";
-import { DishNotFoundError } from "../../errors/dishNotFound";
+import { DishNotFoundError } from "../../errors/dishNotFoundError";
 
 export async function findDishById(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params;

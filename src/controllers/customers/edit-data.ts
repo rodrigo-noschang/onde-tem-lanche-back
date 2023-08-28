@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findManyCustomersByEmail, updateCustomerData } from "../../db/customer";
 
-import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
+import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegisteredError";
 
 export async function editCustomerData(req: FastifyRequest, reply: FastifyReply) {
     const customerId = req.user.sub;

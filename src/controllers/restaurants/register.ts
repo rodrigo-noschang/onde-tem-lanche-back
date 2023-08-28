@@ -4,7 +4,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueRestaurantByEmail, saveRestaurant } from "../../db/restaurants";
 
-import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegistered";
+import { EmailAlreadyRegisteredError } from "../../errors/emailAlreadyRegisteredError";
 
 export async function registerRestaurant(req: FastifyRequest, res: FastifyReply) {
     const restaurantData = req.body;

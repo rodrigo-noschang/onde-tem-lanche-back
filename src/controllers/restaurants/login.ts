@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueRestaurantByEmail } from "../../db/restaurants";
-import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPassword";
+import { InvalidEmailOrPassword } from "../../errors/invalidEmailOrPasswordError";
 
 export async function loginAsRestaurant(req: FastifyRequest, reply: FastifyReply) {
     const requestData = req.body;

@@ -3,8 +3,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueDishById, updateDishData } from "../../db/dishes";
 
-import { CreatorOnlyError } from "../../errors/creatorOnly";
-import { DishNotFoundError } from "../../errors/dishNotFound";
+import { CreatorOnlyError } from "../../errors/creatorOnlyError";
+import { DishNotFoundError } from "../../errors/dishNotFoundError";
 
 export async function editDishData(req: FastifyRequest, reply: FastifyReply) {
     const restaurantId = req.user.sub;

@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { findUniqueDishById, updateDishRatings } from "../../db/dishes";
 
-import { DishNotFoundError } from "../../errors/dishNotFound";
+import { DishNotFoundError } from "../../errors/dishNotFoundError";
 
 export async function rateDish(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params;

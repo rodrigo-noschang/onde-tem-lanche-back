@@ -3,7 +3,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 
 import { findUniqueDishById, removeDishById } from '../../db/dishes';
 
-import { DishNotFoundError } from '../../errors/dishNotFound';
+import { DishNotFoundError } from '../../errors/dishNotFoundError';
 import { NotDishOwnerError } from '../../errors/notDishOwnerError';
 
 export async function deleteDish(req: FastifyRequest, reply: FastifyReply) {
