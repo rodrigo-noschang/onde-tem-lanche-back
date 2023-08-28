@@ -119,6 +119,9 @@ export async function findManyRestaurantsByFilter({ preferences, page }: FindMan
                 hasSome: preferencesQuery
             },
         },
+        include: {
+            images: true
+        },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
@@ -144,6 +147,9 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
                     }
                 }
             ]
+        },
+        include: {
+            images: true
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE

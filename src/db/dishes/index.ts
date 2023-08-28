@@ -51,6 +51,9 @@ export async function findManyDishesByRestaurantId(restaurant_id: string, page: 
         where: {
             restaurant_id
         },
+        include: {
+            images: true
+        },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
@@ -69,6 +72,9 @@ export async function findManyDishesByAllergens(allergens: Allergens[], page: nu
                 }
             }
         },
+        include: {
+            images: true
+        },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
@@ -84,6 +90,9 @@ export async function findManyDishesByPreferences(preferences: Preferences[], pa
             categories: {
                 hasSome: queryPreferences
             }
+        },
+        include: {
+            images: true
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
@@ -112,6 +121,9 @@ export async function findManyDishesByAllergensAndPreferences({ allergens, prefe
                     hasSome: queryAllergens
                 }
             }
+        },
+        include: {
+            images: true
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
