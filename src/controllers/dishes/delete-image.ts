@@ -2,11 +2,12 @@ import fs from 'fs';
 import { z } from 'zod';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
-import { findUniqueImageById, removeImageById } from '../../db/images';
+import { DISH_IMAGE_BASE_URL } from '../../static';
 
 import { ImageNotFoundError } from '../../errors/imageNotFoundError';
 import { NotImageOwnerError } from '../../errors/notImageOwnerError';
-import { DISH_IMAGE_BASE_URL } from '../../static';
+
+import { findUniqueImageById, removeImageById } from '../../db/images';
 
 export async function deleteDishImage(req: FastifyRequest, reply: FastifyReply) {
     const restaurantId = req.user.sub;

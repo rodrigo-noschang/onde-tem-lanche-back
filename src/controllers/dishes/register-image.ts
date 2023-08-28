@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
+import { findUniqueDishById } from '../../db/dishes';
 import { findUniqueImageByPath, saveImagePath } from '../../db/images';
 
-import { InvalidImageNameError } from '../../errors/invalidImageNameError';
-import { findUniqueDishById } from '../../db/dishes';
 import { DishNotFoundError } from '../../errors/dishNotFoundError';
 import { NotDishOwnerError } from '../../errors/notDishOwnerError';
+import { InvalidImageNameError } from '../../errors/invalidImageNameError';
 
 export async function registerDishImage(req: FastifyRequest, reply: FastifyReply) {
     const file = req.file;

@@ -34,3 +34,23 @@ export async function removeImageById(imageId: string) {
         }
     })
 }
+
+export async function findManyRestaurantImagesPathById(restaurantId: string) {
+    const paths = await prisma.image.findMany({
+        where: {
+            restaurant_id: restaurantId
+        }
+    })
+
+    return paths;
+}
+
+export async function findManyDishImagesPathById(dishId: string) {
+    const paths = await prisma.image.findMany({
+        where: {
+            dish_id: dishId
+        }
+    })
+
+    return paths;
+}

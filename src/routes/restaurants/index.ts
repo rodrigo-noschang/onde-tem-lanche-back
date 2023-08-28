@@ -10,6 +10,7 @@ import { findNearByRestaurants } from "../../controllers/restaurants/find-near-b
 import { findRestaurantBySearch } from "../../controllers/restaurants/find-by-search";
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
 import { registerProfileImage } from "../../controllers/restaurants/register-profile-image";
+import { fetchRestaurantImagesPath } from "../../controllers/restaurants/fetch-images-path";
 import { fetchRestaurantProfileImage } from "../../controllers/restaurants/fetch-profile-image";
 import { deleteRestaurantProfileImage } from "../../controllers/restaurants/delete-profile-image";
 
@@ -60,6 +61,7 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants/nearby', findNearByRestaurants);
     app.get('/restaurants/filter', findRestaurantsByFilter);
     app.get('/restaurants/:restaurantId', findRestaurantById);
+    app.get('/restaurants/images/path/:restaurantId', fetchRestaurantImagesPath);
     app.get(
         '/restaurants/image/:imagePath',
         {
