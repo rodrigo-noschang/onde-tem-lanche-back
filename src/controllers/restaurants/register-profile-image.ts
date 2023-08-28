@@ -1,5 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { saveRestaurantProfileImagePath } from "../../db/images";
+
+import { findUniqueImageByPath, saveRestaurantProfileImagePath } from "../../db/images";
+
+import { InvalidImageNameError } from "../../errors/invalidImageNameError";
 
 export async function registerProfileImage(req: FastifyRequest, reply: FastifyReply) {
     const file = req.file;
@@ -12,14 +15,24 @@ export async function registerProfileImage(req: FastifyRequest, reply: FastifyRe
     }
 
     try {
+        const imageAlreadyRegistered = await findUniqueImageByPath(file.filename);
+
+        if (imageAlreadyRegistered) throw new InvalidImageNameError();
+
         await saveRestaurantProfileImagePath({
             path: file.filename,
             restaurant_id: restaurantId
         })
 
+        return reply.status(201).send();
+
     } catch (error) {
+        if (error instanceof InvalidImageNameError) {
+            return reply.status(409).send({
+                message: error.message
+            });
+        }
+
         throw error;
     }
-
-    return reply.send('ok');
 }

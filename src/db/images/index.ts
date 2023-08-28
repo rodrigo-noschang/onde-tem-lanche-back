@@ -7,6 +7,16 @@ export async function saveRestaurantProfileImagePath(data: Prisma.ImageUnchecked
     });
 }
 
+export async function findUniqueImageByPath(path: string) {
+    const image = await prisma.image.findFirst({
+        where: {
+            path
+        }
+    })
+
+    return image;
+}
+
 export async function findUniqueImageById(id: string) {
     const image = await prisma.image.findUnique({
         where: {

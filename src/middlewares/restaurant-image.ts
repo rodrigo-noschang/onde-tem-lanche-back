@@ -1,9 +1,12 @@
 import multer from 'fastify-multer';
+
 import { InvalidImageFormatError } from '../errors/invalidImageFormatError';
+
+import { RESTAURANT_IMAGE_BASE_URL } from '../static';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const url = './src/assets/restaurant-images/';
+        const url = RESTAURANT_IMAGE_BASE_URL;
         cb(null, url)
     },
     filename: function (req, file, cb) {
