@@ -11,11 +11,13 @@ import { findRestaurantBySearch } from "../../controllers/restaurants/find-by-se
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
 import { registerProfileImage } from "../../controllers/restaurants/register-profile-image";
 import { fetchRestaurantProfileImage } from "../../controllers/restaurants/fetch-profile-image";
+import { deleteRestaurantProfileImage } from "../../controllers/restaurants/delete-profile-image";
 
 import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-image";
+
 
 export async function restaurantsRoutes(app: FastifyInstance) {
     app.post('/restaurants', registerRestaurant);
@@ -76,5 +78,17 @@ export async function restaurantsRoutes(app: FastifyInstance) {
                 isRestaurantMiddleware
             ]
         },
-        deleteRestaurant);
+        deleteRestaurant
+    );
+
+    app.delete(
+        '/restaurants/image/:path',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        deleteRestaurantProfileImage
+    )
 }

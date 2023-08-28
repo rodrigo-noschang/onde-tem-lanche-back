@@ -97,7 +97,7 @@ model Customer {
 
 model Image {
   image_id String @id @default(uuid())
-  path     String
+  path     String @unique
 
   restaurant    Restaurant? @relation(fields: [restaurant_id], references: [restaurant_id], onDelete: Cascade)
   restaurant_id String?

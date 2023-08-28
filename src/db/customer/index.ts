@@ -45,3 +45,11 @@ export async function updateCustomerData(data: Prisma.CustomerUpdateInput, custo
         data
     })
 }
+
+export async function removeCustomerById(customerId: string) {
+    await prisma.customer.delete({
+        where: {
+            customer_id: customerId
+        }
+    })
+}
