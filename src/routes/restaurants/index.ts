@@ -82,7 +82,7 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     );
 
     app.delete(
-        '/restaurants/image/:path',
+        '/restaurants/image/:imageId',
         {
             preHandler: [
                 isAuthenticatedMiddleware,
