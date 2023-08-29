@@ -19,10 +19,11 @@ export async function findDishesByRestaurant(req: FastifyRequest, reply: Fastify
     const { page } = querySchema.parse(query);
 
     try {
-        const dishes = await findManyDishesByRestaurantId(restaurantId, page);
+        const { dishes, dishesCount } = await findManyDishesByRestaurantId(restaurantId, page);
 
         return reply.send({
-            dishes
+            dishes,
+            totalFound: dishesCount
         })
     } catch (error) {
         throw error;

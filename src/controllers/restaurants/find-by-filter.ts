@@ -26,7 +26,7 @@ export async function findRestaurantsByFilter(req: FastifyRequest, reply: Fastif
 
     const { preferences, page } = querySchema.parse(formattedQuery);
 
-    const restaurants = await findManyRestaurantsByFilter({
+    const { restaurants, restaurantsCount } = await findManyRestaurantsByFilter({
         preferences: preferences,
         page: page
     })
@@ -39,6 +39,7 @@ export async function findRestaurantsByFilter(req: FastifyRequest, reply: Fastif
     });
 
     return reply.send({
-        restaurants: restaurantsWithoutPassword
+        restaurants: restaurantsWithoutPassword,
+        totalFound: restaurantsCount
     });
 }

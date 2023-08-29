@@ -37,17 +37,19 @@ export async function findDishesByFilter(req: FastifyRequest, reply: FastifyRepl
     const { allergens, page, preferences } = querySchema.parse(formattedQuery);
 
     try {
-        const dishes = allergens.length && preferences.length ?
+        const { dishes, dishesCount } = allergens.length && preferences.length ?
             await findManyDishesByAllergensAndPreferences({ allergens, preferences, page }) :
             allergens.length ?
                 await findManyDishesByAllergens(allergens, page) :
                 preferences.length ?
                     await findManyDishesByPreferences(preferences, page) :
-                    [];
+                    { dishes: [], dishesCount: 0 };
 
         return reply.send({
-            dishes
+            dishes,
+            totalFound: dishesCount
         })
+
     } catch (error) {
         throw error;
     }

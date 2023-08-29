@@ -47,6 +47,12 @@ export async function updateDishRatings(rate: number, dish_id: string) {
 }
 
 export async function findManyDishesByRestaurantId(restaurant_id: string, page: number) {
+    const dishesCount = await prisma.dish.count({
+        where: {
+            restaurant_id
+        }
+    })
+
     const dishes = await prisma.dish.findMany({
         where: {
             restaurant_id
@@ -58,11 +64,24 @@ export async function findManyDishesByRestaurantId(restaurant_id: string, page: 
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return dishes;
+    return {
+        dishes,
+        dishesCount
+    };
 }
 
 export async function findManyDishesByAllergens(allergens: Allergens[], page: number) {
     const allergensQuery = allergens.includes('Não contém') ? [] : allergens;
+
+    const dishesCount = await prisma.dish.count({
+        where: {
+            NOT: {
+                allergens: {
+                    hasSome: allergensQuery
+                }
+            }
+        }
+    })
 
     const dishes = await prisma.dish.findMany({
         where: {
@@ -79,11 +98,22 @@ export async function findManyDishesByAllergens(allergens: Allergens[], page: nu
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return dishes;
+    return {
+        dishes,
+        dishesCount
+    };
 }
 
 export async function findManyDishesByPreferences(preferences: Preferences[], page: number) {
     const queryPreferences = preferences.length > 0 ? preferences : ALL_PREFERENCES;
+
+    const dishesCount = await prisma.dish.count({
+        where: {
+            categories: {
+                hasSome: queryPreferences
+            }
+        }
+    })
 
     const dishes = await prisma.dish.findMany({
         where: {
@@ -98,7 +128,10 @@ export async function findManyDishesByPreferences(preferences: Preferences[], pa
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return dishes;
+    return {
+        dishes,
+        dishesCount
+    };
 }
 
 interface FindManyDishesByFilterParams {
@@ -111,7 +144,20 @@ export async function findManyDishesByAllergensAndPreferences({ allergens, prefe
     const queryPreferences = preferences.length > 0 ? preferences : ALL_PREFERENCES;
     const queryAllergens = allergens.includes('Não contém') ? [] : allergens;
 
-    const other = await prisma.dish.findMany({
+    const dishesCount = await prisma.dish.count({
+        where: {
+            categories: {
+                hasSome: queryPreferences,
+            },
+            NOT: {
+                allergens: {
+                    hasSome: queryAllergens
+                }
+            }
+        }
+    })
+
+    const dishes = await prisma.dish.findMany({
         where: {
             categories: {
                 hasSome: queryPreferences,
@@ -129,7 +175,10 @@ export async function findManyDishesByAllergensAndPreferences({ allergens, prefe
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return other;
+    return {
+        dishes,
+        dishesCount
+    };
 }
 
 export async function removeDishById(dishId: string) {

@@ -15,7 +15,7 @@ export async function findRestaurantBySearch(req: FastifyRequest, reply: Fastify
 
     const formattedQuery = q.trim();
 
-    const restaurants = await findManyRestaurantsByQuery(formattedQuery, page);
+    const { restaurants, restaurantsCount } = await findManyRestaurantsByQuery(formattedQuery, page);
 
     const restaurantsWithoutPassword = restaurants.map(res => {
         return {
@@ -25,6 +25,7 @@ export async function findRestaurantBySearch(req: FastifyRequest, reply: Fastify
     });
 
     return reply.send({
-        restaurants: restaurantsWithoutPassword
+        restaurants: restaurantsWithoutPassword,
+        totalFound: restaurantsCount
     });
 }

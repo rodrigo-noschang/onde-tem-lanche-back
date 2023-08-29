@@ -113,6 +113,14 @@ interface FindManyByFilterProps {
 export async function findManyRestaurantsByFilter({ preferences, page }: FindManyByFilterProps) {
     const preferencesQuery = preferences.length > 0 ? preferences : ALL_PREFERENCES;
 
+    const restaurantsCount = await prisma.restaurant.count({
+        where: {
+            serves: {
+                hasSome: preferencesQuery
+            },
+        }
+    })
+
     const restaurants = await prisma.restaurant.findMany({
         where: {
             serves: {
@@ -126,10 +134,33 @@ export async function findManyRestaurantsByFilter({ preferences, page }: FindMan
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return restaurants;
+    return {
+        restaurants,
+        restaurantsCount
+    };
 }
 
 export async function findManyRestaurantsByQuery(query: string, page: number) {
+    const restaurantsCount = await prisma.restaurant.count({
+        where: {
+            OR: [
+                {
+                    name: {
+                        contains: query,
+                        mode: "insensitive"
+                    },
+
+                },
+                {
+                    description: {
+                        contains: query,
+                        mode: "insensitive"
+                    }
+                }
+            ]
+        }
+    })
+
     const restaurants = await prisma.restaurant.findMany({
         where: {
             OR: [
@@ -149,13 +180,16 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
             ]
         },
         include: {
-            images: true
+            images: true,
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
     })
 
-    return restaurants;
+    return {
+        restaurants,
+        restaurantsCount
+    };
 }
 
 export async function updateRestaurantRatings(rate: number, restaurant_id: string) {
