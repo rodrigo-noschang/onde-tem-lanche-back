@@ -13,8 +13,6 @@ export async function registerCustomer(req: FastifyRequest, reply: FastifyReply)
         name: z.string().max(40, 'name deve ter apenas 40 caractéres'),
         email: z.string().email('formato de email inválido'),
         password: z.string().min(8, 'password deve ter ao menos 8 caractéres'),
-        allergens: z.enum(['Soja', 'Peixe', 'Ovos', 'Mariscos', 'Nozes', 'Amendoim', 'Gluten', 'Leite', 'Não contém']).array(),
-        preferences: z.enum(['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês']).array().optional()
     });
 
     const data = bodySchema.parse(requestData);

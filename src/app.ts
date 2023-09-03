@@ -37,7 +37,6 @@ app.setErrorHandler((error, _, reply) => {
         console.log(error);
     }
 
-    console.log(error);
     if (error instanceof ZodError) {
         return reply.status(400).send({
             message: error.format()

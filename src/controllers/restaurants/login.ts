@@ -44,7 +44,7 @@ export async function loginAsRestaurant(req: FastifyRequest, reply: FastifyReply
 
     } catch (error) {
         if (error instanceof InvalidEmailOrPassword) {
-            return reply.status(401).send({
+            return reply.status(404).send({
                 message: error.message
             })
         }
