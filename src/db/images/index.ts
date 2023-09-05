@@ -53,6 +53,44 @@ export async function removeImageById(imageId: string) {
     })
 }
 
+export async function findManyRestaurantCoverImagesPathById(restaurantId: string) {
+    const paths = await prisma.image.findMany({
+        where: {
+            AND: [
+                {
+                    restaurant_id: restaurantId
+                },
+                {
+                    path: {
+                        startsWith: 'cover'
+                    }
+                }
+            ]
+        }
+    })
+
+    return paths;
+}
+
+export async function findManyRestaurantLogoImagesPathById(restaurantId: string) {
+    const paths = await prisma.image.findMany({
+        where: {
+            AND: [
+                {
+                    restaurant_id: restaurantId
+                },
+                {
+                    path: {
+                        startsWith: 'logo'
+                    }
+                }
+            ]
+        }
+    })
+
+    return paths;
+}
+
 export async function findManyRestaurantImagesPathById(restaurantId: string) {
     const paths = await prisma.image.findMany({
         where: {

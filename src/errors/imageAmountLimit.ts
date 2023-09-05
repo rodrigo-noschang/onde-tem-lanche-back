@@ -1,5 +1,5 @@
 export class ImageAmountLimitError extends Error {
-    message = 'Limites de imagens atingido (até 4 images)';
+    message = 'Limites de imagens atingido';
 
     constructor() {
         super();

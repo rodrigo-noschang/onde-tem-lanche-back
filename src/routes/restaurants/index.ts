@@ -8,7 +8,9 @@ import { editRestaurantData } from "../../controllers/restaurants/edit-data";
 import { findRestaurantById } from "../../controllers/restaurants/find-by-id";
 import { findNearByRestaurants } from "../../controllers/restaurants/find-near-by";
 import { findRestaurantBySearch } from "../../controllers/restaurants/find-by-search";
+import { registerLogoImage } from "../../controllers/restaurants/register-logo-image";
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
+import { registerCoverImage } from "../../controllers/restaurants/register-cover-image";
 import { registerProfileImage } from "../../controllers/restaurants/register-profile-image";
 import { fetchRestaurantImagesPath } from "../../controllers/restaurants/fetch-images-path";
 import { fetchRestaurantProfileImage } from "../../controllers/restaurants/fetch-profile-image";
@@ -18,6 +20,8 @@ import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-profile-image";
+import { uploadRestaurantLogoImageMiddleware } from "../../middlewares/restaurant-logo-image";
+import { uploadRestaurantCoverImageMiddleware } from "../../middlewares/restaurant-cover-image";
 
 
 export async function restaurantsRoutes(app: FastifyInstance) {
@@ -33,6 +37,28 @@ export async function restaurantsRoutes(app: FastifyInstance) {
             ]
         },
         registerProfileImage
+    );
+    app.post(
+        '/restaurants/image/cover',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware,
+                uploadRestaurantCoverImageMiddleware.single('image')
+            ]
+        },
+        registerCoverImage
+    );
+    app.post(
+        '/restaurants/image/logo',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware,
+                uploadRestaurantLogoImageMiddleware.single('image')
+            ]
+        },
+        registerLogoImage
     );
 
     app.put(

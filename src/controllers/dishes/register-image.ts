@@ -2,11 +2,12 @@ import { z } from 'zod';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 import { findUniqueDishById } from '../../db/dishes';
-import { findUniqueImageByPath, saveImagePath } from '../../db/images';
+import { findManyDishImagesPathById, findUniqueImageByPath, saveImagePath } from '../../db/images';
 
 import { DishNotFoundError } from '../../errors/dishNotFoundError';
 import { NotDishOwnerError } from '../../errors/notDishOwnerError';
 import { InvalidImageNameError } from '../../errors/invalidImageNameError';
+import { ImageAmountLimitError } from '../../errors/imageAmountLimit';
 
 export async function registerDishImage(req: FastifyRequest, reply: FastifyReply) {
     const file = req.file;
@@ -26,6 +27,9 @@ export async function registerDishImage(req: FastifyRequest, reply: FastifyReply
     const { dishId } = paramsSchema.parse(params);
 
     try {
+        const ownImages = await findManyDishImagesPathById(dishId);
+        if (ownImages.length >= 1) throw new ImageAmountLimitError();
+
         const imageAlreadyRegistered = await findUniqueImageByPath(file.filename);
 
         if (imageAlreadyRegistered) throw new InvalidImageNameError();
@@ -40,10 +44,16 @@ export async function registerDishImage(req: FastifyRequest, reply: FastifyReply
             dish_id: dishId
         })
 
-        return reply.send('ok');
+        return reply.status(201).send();
     } catch (error) {
         if (error instanceof InvalidImageNameError) {
             return reply.status(409).send({
+                message: error.message
+            })
+        }
+
+        if (error instanceof ImageAmountLimitError) {
+            return reply.status(403).send({
                 message: error.message
             })
         }
