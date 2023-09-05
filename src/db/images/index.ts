@@ -7,6 +7,12 @@ export async function saveImagePath(data: Prisma.ImageUncheckedCreateInput) {
     });
 }
 
+export async function saveMultipleImagePaths(data: Prisma.ImageUncheckedCreateInput[]) {
+    await prisma.image.createMany({
+        data
+    })
+}
+
 export async function findUniqueImageByPath(path: string) {
     const image = await prisma.image.findFirst({
         where: {
@@ -15,6 +21,18 @@ export async function findUniqueImageByPath(path: string) {
     })
 
     return image;
+}
+
+export async function findImagesByMultiplePaths(paths: string[]) {
+    const images = await prisma.image.findMany({
+        where: {
+            path: {
+                in: paths
+            }
+        }
+    })
+
+    return images;
 }
 
 export async function findUniqueImageById(id: string) {

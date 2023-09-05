@@ -17,7 +17,7 @@ import { deleteRestaurantProfileImage } from "../../controllers/restaurants/dele
 import { isCustomerMiddleware } from "../../middlewares/isCustomer";
 import { isRestaurantMiddleware } from "../../middlewares/isRestaurant";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
-import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-image";
+import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-profile-image";
 
 
 export async function restaurantsRoutes(app: FastifyInstance) {
@@ -29,7 +29,7 @@ export async function restaurantsRoutes(app: FastifyInstance) {
             preHandler: [
                 isAuthenticatedMiddleware,
                 isRestaurantMiddleware,
-                uploadRestaurantImageMiddleware.single('image')
+                uploadRestaurantImageMiddleware.array('images')
             ]
         },
         registerProfileImage

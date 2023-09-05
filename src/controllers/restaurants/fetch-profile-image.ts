@@ -12,7 +12,7 @@ export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: Fa
     const { imagePath } = paramsSchema.parse(params);
 
     try {
-        const image = fs.readFileSync(`src/assets/restaurant-images/${imagePath}`);
+        const image = fs.readFileSync(`src/assets/restaurant-profile-images/${imagePath}`);
 
         return reply.type('image/png')
             .send(image);

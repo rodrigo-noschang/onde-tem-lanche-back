@@ -1,33 +1,50 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { findUniqueImageByPath, saveImagePath } from "../../db/images";
+import {
+    findImagesByMultiplePaths,
+    findManyRestaurantImagesPathById,
+    saveMultipleImagePaths
+} from "../../db/images";
 
 import { InvalidImageNameError } from "../../errors/invalidImageNameError";
+import { ImageAmountLimitError } from "../../errors/imageAmountLimit";
 
 export async function registerProfileImage(req: FastifyRequest, reply: FastifyReply) {
-    const file = req.file;
+    const files = req.files;
     const restaurantId = req.user.sub;
 
-    if (!file) {
+    if (!files) {
         return reply.status(400).send({
             message: 'requisição sem imagem'
         });
     }
 
     try {
-        const imageAlreadyRegistered = await findUniqueImageByPath(file.filename);
+        const ownImages = await findManyRestaurantImagesPathById(restaurantId);
 
-        if (imageAlreadyRegistered) throw new InvalidImageNameError();
+        if (ownImages.length + files.length > 4) throw new ImageAmountLimitError();
 
-        await saveImagePath({
-            path: file.filename,
-            restaurant_id: restaurantId
-        })
+        const paths = files.map((image: any) => image.filename)
+        const images = await findImagesByMultiplePaths(paths);
+
+        if (images.length > 0) throw new InvalidImageNameError();
+
+        const imagesData = files.map((image: any) => {
+            return {
+                path: image.filename,
+                restaurant_id: restaurantId
+            }
+        });
+
+        await saveMultipleImagePaths(imagesData)
 
         return reply.status(201).send();
 
     } catch (error) {
-        if (error instanceof InvalidImageNameError) {
+        if (
+            error instanceof InvalidImageNameError ||
+            error instanceof ImageAmountLimitError
+        ) {
             return reply.status(409).send({
                 message: error.message
             });

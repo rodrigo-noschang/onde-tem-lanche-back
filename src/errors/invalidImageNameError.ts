@@ -1,5 +1,5 @@
 export class InvalidImageNameError extends Error {
-    message = 'nome de mensagem inválido';
+    message = 'nome da imagem inválido';
 
     constructor() {
         super();
