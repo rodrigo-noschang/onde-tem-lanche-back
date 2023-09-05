@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { z } from 'zod';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
-export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: FastifyReply) {
+export async function fetchRestaurantLogoImage(req: FastifyRequest, reply: FastifyReply) {
     const params = req.params;
 
     const paramsSchema = z.object({
@@ -13,7 +13,7 @@ export async function fetchRestaurantProfileImage(req: FastifyRequest, reply: Fa
     const imageType = imagePath.split('.').pop();
 
     try {
-        const image = fs.readFileSync(`src/assets/restaurant-profile-images/${imagePath}`);
+        const image = fs.readFileSync(`src/assets/restaurant-logo-images/${imagePath}`);
 
         return reply.type(`image/${imageType}`).send(image);
 

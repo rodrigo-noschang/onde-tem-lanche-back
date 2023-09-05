@@ -12,6 +12,7 @@ import { registerLogoImage } from "../../controllers/restaurants/register-logo-i
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
 import { registerCoverImage } from "../../controllers/restaurants/register-cover-image";
 import { registerProfileImage } from "../../controllers/restaurants/register-profile-image";
+import { fetchRestaurantCoverImage } from "../../controllers/restaurants/fetch-cover-image";
 import { fetchRestaurantImagesPath } from "../../controllers/restaurants/fetch-images-path";
 import { fetchRestaurantProfileImage } from "../../controllers/restaurants/fetch-profile-image";
 import { deleteRestaurantProfileImage } from "../../controllers/restaurants/delete-profile-image";
@@ -22,7 +23,7 @@ import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-profile-image";
 import { uploadRestaurantLogoImageMiddleware } from "../../middlewares/restaurant-logo-image";
 import { uploadRestaurantCoverImageMiddleware } from "../../middlewares/restaurant-cover-image";
-
+import { fetchRestaurantLogoImage } from "../../controllers/restaurants/fetch-logo-image";
 
 export async function restaurantsRoutes(app: FastifyInstance) {
     app.post('/restaurants', registerRestaurant);
@@ -88,15 +89,9 @@ export async function restaurantsRoutes(app: FastifyInstance) {
     app.get('/restaurants/filter', findRestaurantsByFilter);
     app.get('/restaurants/:restaurantId', findRestaurantById);
     app.get('/restaurants/images/path/:restaurantId', fetchRestaurantImagesPath);
-    app.get(
-        '/restaurants/image/:imagePath',
-        {
-            preHandler: [
-                uploadRestaurantImageMiddleware.single('image')
-            ]
-        },
-        fetchRestaurantProfileImage
-    );
+    app.get('/restaurants/image/:imagePath', fetchRestaurantProfileImage);
+    app.get('/restaurants/image/logo/:imagePath', fetchRestaurantLogoImage);
+    app.get('/restaurants/image/cover/:imagePath', fetchRestaurantCoverImage);
 
     app.delete(
         '/restaurants',
