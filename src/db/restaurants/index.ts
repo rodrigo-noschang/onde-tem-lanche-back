@@ -2,7 +2,7 @@ import { Prisma, Restaurant } from "@prisma/client";
 
 import { prisma } from "..";
 
-import { ALL_PREFERENCES, Preferences } from "../../static";
+import { ALL_PREFERENCES, Preferences, WEEK_DAYS } from "../../static";
 
 const AMOUNT_PER_PAGE = 20;
 
@@ -141,6 +141,10 @@ export async function findManyRestaurantsByFilter({ preferences, page }: FindMan
 }
 
 export async function findManyRestaurantsByQuery(query: string, page: number) {
+    const dayIndex = new Date().getDay();
+
+    const today = WEEK_DAYS[dayIndex];
+
     const restaurantsCount = await prisma.restaurant.count({
         where: {
             OR: [
@@ -158,29 +162,67 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
                     }
                 }
             ]
-        }
+        },
     })
+
+    // const restaurants = await prisma.restaurant.findMany({
+    //     where: {
+    //         OR: [
+    //             {
+    //                 name: {
+    //                     contains: query,
+    //                     mode: "insensitive"
+    //                 },
+
+    //             },
+    //             {
+    //                 description: {
+    //                     contains: query,
+    //                     mode: "insensitive"
+    //                 }
+    //             }
+    //         ]
+    //     },
+    //     include: {
+    //         images: true,
+    //         operation_hour: true
+    //     },
+    //     take: page * AMOUNT_PER_PAGE,
+    //     skip: (page - 1) * AMOUNT_PER_PAGE
+    // })
 
     const restaurants = await prisma.restaurant.findMany({
         where: {
-            OR: [
+            AND: [
                 {
-                    name: {
-                        contains: query,
-                        mode: "insensitive"
-                    },
+                    OR: [
+                        {
+                            name: {
+                                contains: query,
+                                mode: "insensitive"
+                            },
 
+                        },
+                        {
+                            description: {
+                                contains: query,
+                                mode: "insensitive"
+                            }
+                        }
+                    ]
                 },
                 {
-                    description: {
-                        contains: query,
-                        mode: "insensitive"
+                    operation_hour: {
+                        some: {
+                            day: today
+                        }
                     }
                 }
             ]
         },
         include: {
             images: true,
+            operation_hour: true
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE

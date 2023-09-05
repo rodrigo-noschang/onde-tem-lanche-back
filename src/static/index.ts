@@ -3,6 +3,8 @@ export type Allergens = 'Soja' | 'Peixe' | 'Ovos' | 'Mariscos' | 'Nozes' | 'Amen
 
 export type WeekDays = 'Segunda-feira' | 'Terça-feira' | 'Quarta-feira' | 'Quinta-feira' | 'Sexta-feira' | 'Sábado' | 'Domingo';
 
+export const WEEK_DAYS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];;
+
 
 export const ALL_PREFERENCES = ['Carnes', 'Massas', 'Pizzas', 'Lanches', 'Porções', 'Saladas', 'Confeitaria', 'Açaí/Sorvete', 'Yakisoba', 'Marmitex', 'Esfiha', 'Japonês'];
 
