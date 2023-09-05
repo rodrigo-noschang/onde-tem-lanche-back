@@ -15,6 +15,7 @@ import { uploadDishImageMiddleware } from "../../middlewares/dish-image";
 import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { deleteDishImage } from "../../controllers/dishes/delete-image";
 import { fetchDishImagesPath } from "../../controllers/dishes/fetch-images-path";
+import { fetchDishImage } from "../../controllers/dishes/fetch-image";
 
 export async function dishesRoutes(app: FastifyInstance) {
     app.post(
@@ -64,6 +65,7 @@ export async function dishesRoutes(app: FastifyInstance) {
     app.get('/dishes/:dishId', findDishById);
     app.get('/dishes/filter', findDishesByFilter);
     app.get('/dishes/images/path/:dishId', fetchDishImagesPath);
+    app.get('/dishes/image/:imagePath', fetchDishImage);
     app.get('/dishes/restaurant_dishes/:restaurantId', findDishesByRestaurant);
 
     app.delete(
