@@ -11,9 +11,12 @@ import { findRestaurantBySearch } from "../../controllers/restaurants/find-by-se
 import { registerLogoImage } from "../../controllers/restaurants/register-logo-image";
 import { findRestaurantsByFilter } from "../../controllers/restaurants/find-by-filter";
 import { registerCoverImage } from "../../controllers/restaurants/register-cover-image";
+import { fetchRestaurantLogoImage } from "../../controllers/restaurants/fetch-logo-image";
 import { registerProfileImage } from "../../controllers/restaurants/register-profile-image";
 import { fetchRestaurantCoverImage } from "../../controllers/restaurants/fetch-cover-image";
 import { fetchRestaurantImagesPath } from "../../controllers/restaurants/fetch-images-path";
+import { deleteRestaurantLogoImage } from "../../controllers/restaurants/delete-logo-image";
+import { deleteRestaurantCoverImage } from "../../controllers/restaurants/delete-cover-image";
 import { fetchRestaurantProfileImage } from "../../controllers/restaurants/fetch-profile-image";
 import { deleteRestaurantProfileImage } from "../../controllers/restaurants/delete-profile-image";
 
@@ -23,7 +26,7 @@ import { isAuthenticatedMiddleware } from "../../middlewares/isAuthenticated";
 import { uploadRestaurantImageMiddleware } from "../../middlewares/restaurant-profile-image";
 import { uploadRestaurantLogoImageMiddleware } from "../../middlewares/restaurant-logo-image";
 import { uploadRestaurantCoverImageMiddleware } from "../../middlewares/restaurant-cover-image";
-import { fetchRestaurantLogoImage } from "../../controllers/restaurants/fetch-logo-image";
+
 
 export async function restaurantsRoutes(app: FastifyInstance) {
     app.post('/restaurants', registerRestaurant);
@@ -113,5 +116,27 @@ export async function restaurantsRoutes(app: FastifyInstance) {
             ]
         },
         deleteRestaurantProfileImage
+    )
+
+    app.delete(
+        '/restaurants/image/cover/:imageId',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        deleteRestaurantCoverImage
+    )
+
+    app.delete(
+        '/restaurants/image/logo/:imageId',
+        {
+            preHandler: [
+                isAuthenticatedMiddleware,
+                isRestaurantMiddleware
+            ]
+        },
+        deleteRestaurantLogoImage
     )
 }
