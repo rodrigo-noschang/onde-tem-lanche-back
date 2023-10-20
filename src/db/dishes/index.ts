@@ -6,9 +6,11 @@ import { ALL_PREFERENCES, Allergens, Preferences } from "../../static";
 const AMOUNT_PER_PAGE = 20;
 
 export async function saveDish(data: Prisma.DishUncheckedCreateInput) {
-    await prisma.dish.create({
+    const dish = await prisma.dish.create({
         data
     });
+
+    return dish;
 }
 
 export async function findUniqueDishById(dish_id: string) {

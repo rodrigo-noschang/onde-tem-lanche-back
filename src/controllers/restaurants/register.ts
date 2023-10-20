@@ -31,8 +31,10 @@ export async function registerRestaurant(req: FastifyRequest, res: FastifyReply)
             password_hash
         }
 
-        await saveRestaurant(newRestaurant);
-        return res.status(201).send();
+        const registeredRestaurant = await saveRestaurant(newRestaurant);
+        return res.status(201).send({
+            restaurant: registeredRestaurant
+        });
 
     } catch (error) {
         if (error instanceof EmailAlreadyRegisteredError) {

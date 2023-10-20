@@ -27,9 +27,11 @@ export async function registerDish(req: FastifyRequest, reply: FastifyReply) {
     }
 
     try {
-        await saveDish(formattedData);
+        const newDish = await saveDish(formattedData);
 
-        return reply.status(201).send();
+        return reply.status(201).send({
+            dishId: newDish.dish_id
+        });
     } catch (error) {
         throw error;
     }

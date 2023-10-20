@@ -3,6 +3,7 @@ import { Prisma, Restaurant } from "@prisma/client";
 import { prisma } from "..";
 
 import { ALL_PREFERENCES, Preferences, WEEK_DAYS } from "../../static";
+import { findManyHoursByRestaurantId } from "../operation_hours";
 
 const AMOUNT_PER_PAGE = 20;
 
@@ -20,7 +21,11 @@ export async function findUniqueRestaurantById(restaurant_id: string) {
                     closes_at: true,
                 }
             },
-            menu: true,
+            menu: {
+                include: {
+                    images: true
+                }
+            },
             images: true
         }
     })
@@ -69,10 +74,11 @@ export async function findManyRestaurantsByPhone(phone: string) {
 }
 
 export async function saveRestaurant(data: Prisma.RestaurantUncheckedCreateInput) {
-
-    await prisma.restaurant.create({
+    const newRestaurant = await prisma.restaurant.create({
         data
     });
+
+    return newRestaurant;
 }
 
 export async function updateRestaurantData(restaurant_id: string, data: Prisma.RestaurantUpdateInput,) {
@@ -94,14 +100,27 @@ export async function findManyRestaurantsByLocation({ lat, lng, page }: FindMany
     const limit = 20;
     const offset = (page - 1) * 20;
 
-    const restaurants = await prisma.$queryRaw<Restaurant[]>`
+    const nearbyRestaurants = await prisma.$queryRaw<Restaurant[]>`
         SELECT * from restaurants
         WHERE ( 6371 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) <= 10
         LIMIT ${limit} 
         OFFSET ${offset}
     `;
 
-    return restaurants;
+    const restaurantsWithHours = [];
+
+    for await (let rest of nearbyRestaurants) {
+        const restaurantHours = await findManyHoursByRestaurantId(rest.restaurant_id);
+
+        const withHours = {
+            ...rest,
+            operation_hour: restaurantHours
+        };
+
+        restaurantsWithHours.push(withHours);
+    }
+
+    return restaurantsWithHours;
 }
 
 
@@ -124,7 +143,7 @@ export async function findManyRestaurantsByFilter({ preferences, page }: FindMan
     const restaurants = await prisma.restaurant.findMany({
         where: {
             serves: {
-                hasSome: preferencesQuery
+                hasSome: preferencesQuery,
             },
         },
         include: {
@@ -161,8 +180,8 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
                         mode: "insensitive"
                     }
                 }
-            ]
-        },
+            ],
+        }
     })
 
     // const restaurants = await prisma.restaurant.findMany({
@@ -222,7 +241,12 @@ export async function findManyRestaurantsByQuery(query: string, page: number) {
         },
         include: {
             images: true,
-            operation_hour: true
+            operation_hour: true,
+            menu: {
+                include: {
+                    images: true
+                }
+            }
         },
         take: page * AMOUNT_PER_PAGE,
         skip: (page - 1) * AMOUNT_PER_PAGE
